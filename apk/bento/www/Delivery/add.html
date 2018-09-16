@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <style type="text/css">
+      body, html{
+          background-color:#34515E;
+         font-family: 'Open Sans Condensed', sans-serif;
+          font-size: 18px;
+
+      }
+
+      .register-form{
+          font-size: 16px;
+         left: 50%;
+          top: 50%;
+          position: absolute;
+          -webkit-transform: translate3d(-50%, -50%, 0);
+          -moz-transform: translate3d(-50%, -50%, 0);
+          transform: translate3d(-50%, -50%, 0);
+      }
+
+      .regbutton{
+          height: 50px;
+          width: 200px;
+          background-color:tomato;
+          border-radius: 0px;
+          font-size: 18px;
+          color:white;
+          border: none !important;
+          margin-bottom: 5px;
+      }
+      .regbutton:hover{
+          color: white;
+          background-color:#aa422f;
+      }
+      .regbutton:active{
+          color: white;
+          background-color:#aa422f;
+      }
+      .logbutton{
+          height: 50px;
+          width: 200px;
+          background-color:yellowgreen;
+          border-radius: 0px;
+          font-size: 18px;
+          color:white;
+          border: none !important;
+          margin-bottom: 5px;
+      }
+      .logbutton:hover{
+          color: white;
+          background-color:darkolivegreen;
+      }
+      .logbutton:active{
+          color: white;
+          background-color:darkolivegreen;
+      }
+
+
+
+      .register-form label{
+          color: aliceblue;
+
+      }
+      .register-form input{
+          margin-bottom: 5px;
+          width: 430px;
+          height: 40px;
+          border-radius: 0px;
+      }
+      </style>
+
+    <script src="jquery-3.3.1.js"></script>
+    <link href="bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="bootstrap.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <title>新增外送人員</title>
+  </head>
+  <body>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <div class="container-fluid">
+    	 <form class="register-form">
+          <div class="row">
+               <div class="col-md-4 col-sm-4 col-lg-4">
+                  <label for="firstName">ID</label>
+                   <input id="Id1" class="form-control" type="text">
+               </div>
+          </div>
+          <div class="row">
+               <div class="col-md-4 col-sm-4 col-lg-4">
+                  <label for="email">Name</label>
+                   <input id="name1" class="form-control" type="text">
+               </div>
+          </div>
+          <div class="row">
+               <div class="col-md-4 col-sm-4 col-lg-4">
+                  <label for="password">Phone</label>
+                   <input id="phone1" class="form-control" type="tel">
+               </div>
+          </div>
+          <hr>
+          <div class="row">
+               <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+               <button type="button" class="btn btn-default regbutton" onclick="AddPeople();">新增</button>
+
+              </div>
+              <div class="col-md-6 col-sm-6 col-xs-6 col-lg-6">
+               <button type="button" class="btn btn-default logbutton" onClick="location.href='delPeople/index.html';">刪除</button>
+              </div>
+          </div>
+        </form>
+    </div>
+    <script>
+    var config = {
+      apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+      authDomain: "nchumis2017-5566.firebaseapp.com",
+      databaseURL: "https://nchumis2017-5566.firebaseio.com",
+      projectId: "nchumis2017-5566",
+      storageBucket: "nchumis2017-5566.appspot.com",
+      messagingSenderId: "501160127423"
+    };
+    firebase.initializeApp(config);
+    var database = firebase.database();
+    var x1,y1,z1;
+
+    function AddPeople(){
+      x1 = document.getElementById("Id1").value;
+      y1 = document.getElementById("name1").value;
+      z1 = document.getElementById("phone1").value;
+      database.ref("Deliverys/").once("value").then(function(snapshot) {
+        if(x1===""){
+          window.alert("ID不可爲空");
+        }
+        else if(!snapshot.child(x1).exists()){
+          database.ref("Deliverys/").child(x1).update({
+            "name": y1,
+            "phone": z1
+          });
+        }else{
+            window.alert("該ID存在");
+          }
+         });
+      }
+      function DelPeople(){
+
+      }
+    </script>
+  </body>
+</html>

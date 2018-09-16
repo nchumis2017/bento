@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+
+    <title>訂單管理-店名</title>
+    <script>
+        $(document).ready(function () {
+            $('.modal').modal();
+            $('ul.tabs').tabs({
+                swipeable: true,
+                responsiveThreshold: Infinity
+            });
+
+        });
+
+    </script>
+    <style>
+        .carousel .carousel-item {
+            height:100%;
+        }
+        div.tabs-content.carousel.initialized{
+            height: 700px!important;
+        }
+
+    </style>
+</head>
+
+<body>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">&nbsp訂單管理</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script>
+        var config = {
+            apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+            authDomain: "nchumis2017-5566.firebaseapp.com",
+            databaseURL: "https://nchumis2017-5566.firebaseio.com",
+            projectId: "nchumis2017-5566",
+            storageBucket: "nchumis2017-5566.appspot.com",
+            messagingSenderId: "501160127423"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+    </script>
+
+    <div class="row"></div>
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col l2">
+                    <a href="#waiting">等待確認</a>
+                </li>
+                <li class="tab col l3">
+                    <a href="#accept">製作中</a>
+                </li>
+                <li class="tab col l3">
+                    <a href="#delivery">外送中</a>
+                </li>
+                <li class="tab col l2">
+                    <a href="#complete">已完成</a>
+                </li>
+                <li class="tab col l2">
+                    <a href="#reject">已拒絕</a>
+                </li>
+            </ul>
+        </div>
+        <div id="waiting" class="col s12">
+            <div class="row">
+                <ul id="list_waiting" class="collapsible popout" data-collapsible="accordion" ></ul>
+            </div>
+        </div>
+        <div id="accept" class="col s12" >
+            <div class="row">
+                <ul id="list_accept" class="collapsible popout" data-collapsible="accordion"></ul>
+            </div>
+        </div>
+        <div id="delivery" class="col s12">
+            <div class="row">
+                <ul id="list_delivery" class="collapsible popout" data-collapsible="accordion"></ul>
+            </div>
+        </div>
+        <div id="complete" class="col s12">
+            <div class="row">
+                <ul id="list_complete" class="collapsible popout" data-collapsible="accordion"></ul>
+            </div>
+        </div>
+
+        <div id="reject" class="col s12">
+            <div class="row">
+                <ul id="list_reject" class="collapsible popout" data-collapsible="accordion"></ul>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal Trigger -->
+    <!-- <a class="waves-effect waves-light btn modal-trigger" href="#modal1">Modal</a> -->
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+        <div class="modal-content" id="modal1-content"></div>
+        <div class="modal-footer" id="modal1-footer"></div>
+    </div>
+    <script>
+        var ordersRef = database.ref("Orders/");
+        // var have_content = false;
+        ordersRef.on('value', function(snapshot){
+            if (!snapshot.exists()) {
+                $('#list_orders').empty();
+
+                var str = "";
+                str += "<h1>尚無訂單資料</h1>";
+                $('#list_orders').append(str);
+
+            }
+            else
+            {
+                $('#list_accept').empty();
+                $('#list_waiting').empty();
+                $('#list_delivery').empty();
+                $('#list_complete').empty();
+                $('#list_reject').empty();
+
+
+
+                snapshot.forEach(function(childSnap){
+                    var str ="";
+                    var list_append_place = '';
+                    str += '<li><div class="collapsible-header"><i class="material-icons">local_dining</i>'+ childSnap.key+'<span class="neworder new badge" data-badge-caption="" >新訂單</span></div>';
+                    if(childSnap.val().OrderStatus == 0 )
+                    {
+                        // var str = "";
+                        // str += "<h1>尚無訂單資料</h1>";
+                        // $('#list_orders').append(str);
+                        return;
+                    }
+
+                    switch(childSnap.val().OrderStatus){
+                        case 1:
+                            list_append_place = '#list_waiting';
+                            break;
+                        case 2:
+                            list_append_place = '#list_accept';
+                            break;
+                        case 3:
+                            list_append_place = '#list_delivery';
+                            break;
+                        case 4:
+                            list_append_place = '#list_complete';
+                            break;
+                        case 5:
+                            list_append_place = '#list_cancel';
+                            break;
+                        case 6:
+                            list_append_place = '#list_reject';
+                            break;
+                    }
+                    var obj = childSnap.child("OrderDetail").val();
+                    str += '<div class="collapsible-body"><ul>';
+                    $.each(obj, function(key, value){
+                        var num = 0;
+                        if (key == "time")
+                            return;
+                        $.each(value.OrderPeople, function(person){
+                            num += Number(value.OrderPeople[person].number);
+                        });
+
+
+                        str += '<li>'+value.name+ ":"+ num+'</li>';
+                    });
+                    obj = childSnap.child("OrderInfo").val();
+                    str += '<li><h5>訂購人資料</h5></li>';
+
+                    $.each(obj, function(key, value){
+                        switch(key){
+                            case "Address":
+                            str += '<li>地址' + ":" + value + '</li>';
+                            break;
+                            case "OrderMainName":
+                                str += '<li>訂購人' + ":" + value + '</li>';
+                                break;
+                            case "OrderTime":
+                                str += '<li>訂購時間' + ":" + value + '</li>';
+                                break;
+                            case "TEL":
+                                str += '<li>聯絡電話' + ":" + value + '</li>';
+                                break;
+                        }
+
+                    });
+                    str += '</ul>';
+                    var order_id = childSnap.child("OrderId").val();
+                    str += '<a href="#!" class="status_group modal-action modal-close waves-effect waves-light btn right red" id="'+ order_id+'reject" onclick="javascript:setOrderStatus(\'' + order_id + '\', 6)">拒絕訂單</a>';
+                    str += '<a href="#!" class="status_group modal-action modal-close waves-effect waves-light btn right grey" style="display:none" id="' + order_id +'cancel" onclick="javascript:setOrderStatus(\'' + order_id + '\', 5)">取消訂單</a>';
+                    str += '<a href="#!" class="status_group modal-action modal-close waves-effect waves-light btn right orange" style="display:none" id="' + order_id +'delivery" onclick="javascript:setOrderStatus(\'' + order_id + '\', 3)">開始外送</a>';
+                    str += '<a href="#!" class="status_group modal-action modal-close waves-effect waves-green btn right" id="' + order_id +'accept" onclick="javascript:setOrderStatus(\'' + order_id + '\', 2)">接受訂單</a>';
+                    str += '</div></li>';
+                    $(list_append_place).append(str);
+                    if (childSnap.val().OrderStatus == 2) {
+                        $("#"+ order_id +"reject").hide();
+                        $("#" + order_id +"accept").hide();
+                        $("#" + order_id +"delivery").show();
+                        $("#" + order_id +"cancel").show();
+
+                    }
+
+                });
+                var emptyIcon = '<img src="./image/package.svg" style="margin-top:10%;margin-left:30%;" width="40%" height="40%" alt="">';
+                if($('#list_waiting').children().length == 0)
+                    $('#list_waiting').append(emptyIcon);
+                if ($('#list_accept').children().length == 0)
+                    $('#list_accept').append(emptyIcon);
+                if ($('#list_delivery').children().length == 0)
+                    $('#list_delivery').append(emptyIcon);
+                if ($('#list_cancel').children().length == 0)
+                    $('#list_cancel').append(emptyIcon);
+                if ($('#list_reject').children().length == 0)
+                    $('#list_reject').append(emptyIcon);
+            }
+
+        });
+
+
+        var newOrder;
+        ordersRef.on('child_added', function(snapshot){
+            var obj = snapshot.val();
+            newOrder = obj.OrderId;
+            receiveOrder(newOrder);
+        });
+        function receiveOrder(newOrder){
+            $('#modal1-content').empty();
+            $('#modal1-footer').empty();
+
+            ordersRef.child(newOrder).on("value", function (snapshot) {
+                $('#modal1-content').empty();
+                $('#modal1-footer').empty();
+                var newOrderObj = snapshot.val();
+                if(newOrderObj.OrderStatus == 1)
+                {
+                    var str = '';
+                    var footer = '';
+                    str += '<h4>收到新訂單</h4>';
+                    $.each(newOrderObj.OrderDetail, function(key, value){
+                        if (key == 'time')
+                            return;
+
+                            var num = 0;
+
+                            $.each(value.OrderPeople, function (person) {
+                                num += Number(value.OrderPeople[person].number);
+
+                            });
+                            str += value.name+":::::::"+num+"個<br/>";
+
+                    });
+
+
+                    str += '<h5>訂購人資料</h5>';
+
+                    $.each(newOrderObj.OrderInfo, function (key, value) {
+                        switch (key) {
+                            case "Address":
+                                str += '<li>地址' + ":" + value + '</li>';
+                                break;
+                            case "OrderMainName":
+                                str += '<li>訂購人' + ":" + value + '</li>';
+                                break;
+                            case "OrderTime":
+                                str += '<li>訂購時間' + ":" + value + '</li>';
+                                break;
+                            // case "TEL":
+                            //     str += '<li>聯絡電話' + ":" + value + '</li>';
+                            //     break;
+                        }
+
+                    });
+
+                    footer += '<a href="#!" class="modal-action modal-close waves-effect waves-green btn" >確認</a>';
+                    // footer += '<a href="#!" class="modal-action modal-close waves-effect waves-green btn" onclick="javascript:setOrderStatus(\'' + newOrder + '\', 2)">接受訂單</a>';
+
+
+                    $('#modal1-content').append(str);
+                    $('#modal1-footer').append(footer);
+                    // if ($('#modal1-content').children().length == 0)
+                        // $('#modal1').modal('close');
+
+                    $('#modal1').modal('open');
+                }
+
+                // else {}
+
+            });
+        }
+        function setOrderStatus(orderID, token){
+            ordersRef.child(orderID+"/OrderStatus").set(token);
+
+            if (token == 2) {
+                $("#"+ orderID +"reject").hide();
+                $("#" + orderID +"accept").hide();
+                $("#" + orderID +"delivery").show();
+                $("#" + orderID +"cancel").show();
+
+            }
+            else if (token == 3) {
+                $("#" + orderID + "reject").hide();
+                $("#" + orderID + "accept").hide();
+                $("#" + orderID + "delivery").hide();
+                $("#" + orderID + "cancel").hide();
+
+            }
+        }
+
+
+    </script>
+
+
+    <script src="https://webduino.io/components/webduino-js/dist/webduino-all.min.js"></script>
+    <script src="https://blockly.webduino.io/webduino-blockly.js"></script>
+    <script src="https://blockly.webduino.io/lib/runtime.min.js"></script>
+    <script type="text/javascript">
+    ///////////////溫溼度SENSOR//////////////
+
+
+     var dht;
+   boardReady({device: 'waOZ'}, function (board) {
+     board.systemReset();
+     board.samplingInterval = 20;
+     dht = getDht(board, 11);
+     dht.read(function(evt){
+       var temperature = dht.temperature;
+       var humidity  = dht.humidity;
+       database.ref("sensor/temperature").set(1);
+       database.ref("sensor/humidity").set(1);
+     }, 1000);
+   });
+
+
+    </script>
+</body>
+
+</html>

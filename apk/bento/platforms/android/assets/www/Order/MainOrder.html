@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="../js/jquery-3.2.1.min.js" ></script>
+    <link rel="stylesheet" href="../css/materialize.min.css">
+    <script src="../js/materialize.min.js"></script>
+    <script src="../js/sweetalert.min.js"></script>
+    <script src="../QRcode/qrcodeJs/jquery.qrcode.js"></script>
+    <script src="../QRcode/qrcodeJs/qrcode.js"></script>
+
+
+<script type="text/javascript">
+
+window.history.forward(1);
+
+</script>
+  </head>
+
+<style media="screen">
+body{
+  font-family: microsoft jhenghei!important;
+  font-weight: bold;
+}
+#div_confirm{
+  position: absolute;
+  bottom: 0;
+
+}
+footer{
+  width: 100%;
+  bottom : 0;
+  position: absolute;
+}
+.a_footer{
+  width: 100%;
+}
+</style>
+
+
+  <body>
+
+
+
+    <!-- navbar -->
+    <!-- navbar -->
+    <!-- navbar -->
+    <!-- navbar -->
+    <!-- navbar -->
+
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <div  style="float:left;position:relative;z-index:1; margin:0 18px;" onclick="javascript:modal_open()"><i class='material-icons'>info_outline</i></div>
+
+      </div>
+    </nav>
+    </div>
+
+
+    <!-- Modal Structure -->
+    <div id="modal1" class="modal">
+      <div class="modal-content" style="padding-bottom:0px;">
+        <h4 id="modal_shopName">XX便當店</h4>
+        <hr>
+        <table class="highlight">
+          <tr>
+            <td>電話</td><td id="modal_shopTel">04-22882288</td>
+          </tr>
+          <tr>
+            <td>地址</td><td id="modal_shopAddress">台中市南區興大路140號</td>
+          </tr>
+          <tr>
+            <td>邀請朋友QRCODE</td><td><div id="qrcode"></div></td>
+          </tr>
+        </table>
+
+      </div>
+      <div class="modal-footer">
+        <div  class="modal-action modal-close waves-effect waves-green btn-flat" style="color:blue!important;">OK</div>
+      </div>
+    </div>
+
+
+    <script type="text/javascript">
+    var url = location.href;
+    var decode = decodeURIComponent(url);
+    var temp = decode.split("?");
+    var vars = temp[1].split("&");
+    jQuery('#qrcode').qrcode({width:"140" ,height:"140" ,text:vars[0]});
+    console.log(vars[1]);      /////////////vars[1]店家名稱 ,vars[0]訂單序號
+    document.getElementById("modal_shopName").innerHTML = vars[1];
+    </script>
+    <!-- . -->
+
+    <script type="text/javascript">
+    $(document).ready(function(){
+      // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+      $('.modal').modal();
+      $('.modal').modal('open');
+    });
+    function modal_open(){
+      $(document).ready(function(){
+        $('#modal1').modal('open');
+
+      });
+    }
+    </script>
+
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+<!-- navbar -->
+<!-- navbar -->
+<!-- navbar -->
+<!-- navbar -->
+<!-- navbar -->
+
+
+
+
+
+
+
+
+
+
+  <div class="card">
+    <!-- <div class="card-title" style="font-weight:bold;">
+      訂單資料
+    </div> -->
+    <div class="card-tabs">
+      <ul class="tabs tabs-fixed-width">
+        <li class="tab"><a class="active" href="#test4" id="a_tab1">基本資料</a></li>
+        <li class="tab"><a href="#test5" id="a_tab2">訂購餐點</a></li>
+        <li class="tab"><a href="#test6" id="a_tab3">查看他人</a></li>
+      </ul>
+    </div>
+    <div class="card-content grey lighten-4" style="padding-top:12px;padding-bottom:12px;">
+
+
+      <div id="test4">
+
+
+
+        <div class="card" id="form1">
+
+
+          <div class="card-content" >
+
+        <form class="" action="javascript:writeData()" method="post">
+          店家名稱 <input type="text" id="theOrderShopName" value="" disabled>
+          訂單編號 <input type="text" id="OrderId" value="" placeholder="OrderId" disabled>
+          名字 <input type="text" id="OrderName" value="主揪人" placeholder="Name">
+          電話 <input type="text" id="TEL" value="" placeholder="TEL">
+
+          地址 <br>
+          <a  onclick="javascript:curLoc()">現在位置</a>   <a  onclick="javascript:favLoc()">常用地址</a>
+          <input type="text" id="Address" value="" placeholder="Address">
+
+
+          取餐時間 <input type="text" id="OrderTime" class="timepicker value=" >
+
+
+          狀態<input type="number" id="OrderStatus" value="0" placeholder="OrderStatus" disabled>
+          <input type="submit" value="下一步" id="submit" class="btn">
+
+          <br>
+
+
+
+
+        </form>
+
+        <script type="text/javascript">
+
+          document.getElementById("theOrderShopName").value = vars[1];
+
+          var UserName = window.localStorage.getItem("UserName");
+          document.getElementById("OrderName").value = "(主揪人)"+UserName;
+
+          function curLoc(){
+          var CurrentLocation = window.localStorage.getItem("CurrentLocation");
+          document.getElementById("Address").value = CurrentLocation;
+          }
+          function favLoc(){
+            var FavoriteAddress = window.localStorage.getItem("FavoriteAddress");
+            document.getElementById("Address").value = FavoriteAddress;
+          }
+        </script>
+    </div>
+  </div>
+
+
+
+      </div>
+      <div id="test5">
+
+
+
+        <div id="div_products">
+          <h5>請先送出訂單資料</h5>
+        </div>
+
+
+
+
+
+
+
+      </div>
+      <div id="test6">
+
+      <h5>查看目前訂購</h5>
+
+        <div class="card" style="display:none;" id="joinPeopleCard">
+        <div class="card-content" id="joinPeople">
+
+          <div class='row'><div class='col s12'><b><p>123</p></b><p>GGG</p></div></div>
+
+        </div>
+        <br>
+        <footer><button class="btn a_footer" onclick="javascript:send()">送出訂單</button></footer>
+
+        </div>
+
+
+
+
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+    authDomain: "nchumis2017-5566.firebaseapp.com",
+    databaseURL: "https://nchumis2017-5566.firebaseio.com",
+    projectId: "nchumis2017-5566",
+    storageBucket: "nchumis2017-5566.appspot.com",
+    messagingSenderId: "501160127423"
+  };
+  firebase.initializeApp(config);
+
+
+  /////////////////初始化////////////////////
+
+  var database = firebase.database();
+
+//////////////init products/////////////////////
+
+function initBento(){
+  document.getElementById("div_products").innerHTML="";
+  var numBento;
+  database.ref("Products/Bento/Data/").once("value", function(snapshot) {
+    numBento = snapshot.numChildren();
+
+    // var OrderId = document.getElementById("OrderId").value;
+
+    for(var i = 1 ;i<=numBento ; i++){
+      var a = snapshot.child("Bento"+i+"/ProductName/").val();
+      var b = snapshot.child("Bento"+i+"/ProductIntro/").val();
+      var c = snapshot.child("Bento"+i+"/ProductPrice/").val();
+      var div_products = document.getElementById("div_products");
+
+    div_products.innerHTML+="<div class='card'><div class='card-content'>品名:<span id='name"+i+"'>"+a+"</span><br>價格:<span id='price"+i+"'>"+c+" </span><br>數量<span id = 'number"+i+"'>0</span><br>小計:<span id='total"+i+"'>0</span><br><div id='people_in"+i+"'><button type='button' class='btn' onclick='javascript:add_number("+i+")' >+</button> <button type='button'  class='btn' onclick='javascript:del_number("+i+")' >-</button></div></div></div>";
+
+    //
+    // database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/"+"TEST"+"/").set({
+    //   number : 0,
+    //   price : c,
+    //   total : 0,
+    //   name : a
+    // });
+    }
+});
+}
+/////////////////////
+function TimeFunction(){
+  var theDate = new Date();
+  var theTime = theDate.getTime();
+
+  var OrderId = document.getElementById("OrderId").value;
+
+  database.ref("Orders/"+OrderId+"/OrderDetail/time/").set(theTime);
+}
+
+function add_number(i){
+
+  var name_i = document.getElementById("name"+i).innerHTML;
+  var price_i = document.getElementById("price"+i).innerHTML;
+  var number_i = document.getElementById("number"+i);
+
+
+  ++number_i.innerHTML;
+  document.getElementById("total"+i).innerHTML=price_i*number_i.innerHTML;
+  var total_i = document.getElementById("total"+i).innerHTML;
+  var number_inner = number_i.innerHTML;
+
+  ///////count price//////
+
+  var OrderId = document.getElementById("OrderId").value;
+  var OrderName = document.getElementById("OrderName").value;
+
+
+
+  var dd = database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/");
+  dd.once("value").then(function(snapshot){
+    if(!snapshot.child("name").exists()){
+      dd.set({
+        name: name_i
+      });
+    }
+    database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/"+OrderName+"/").set({
+      bento_i : i,
+      number : number_inner,
+      price : price_i,
+      total : total_i,
+      name : name_i,
+      isPaid : 0
+    });
+
+
+
+  });
+
+
+setTimeout(TimeFunction,1000);
+}
+
+function del_number(i){
+  var name_i = document.getElementById("name"+i).innerHTML;
+  var price_i = document.getElementById("price"+i).innerHTML;
+  var number_i = document.getElementById("number"+i);
+
+  if(number_i.innerHTML!=0){
+
+    --number_i.innerHTML;
+    document.getElementById("total"+i).innerHTML=price_i*number_i.innerHTML;
+    var total_i = document.getElementById("total"+i).innerHTML;
+    var number_inner = number_i.innerHTML;
+
+    ///////count price//////
+
+    var OrderId = document.getElementById("OrderId").value;
+    var OrderName = document.getElementById("OrderName").value;
+
+    var dd = database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/");
+    dd.once("value").then(function(snapshot){
+      if(!snapshot.child("name").exists()){
+        dd.set({
+          name: name_i
+        });
+      }
+      database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/"+OrderName+"/").set({
+        bento_i : i,
+        number : number_inner,
+        price : price_i,
+        total : total_i,
+        name : name_i,
+        isPaid : 0
+      });
+    });
+
+}
+
+}
+/////////////////////////////////////////////////////
+
+
+
+
+
+  //////////////寫資料/////////////////////
+
+  var ref = firebase.database().ref("Orders/");
+  // ref.once("value").then(function(snapshot) {
+  //     var counter = snapshot.numChildren();
+  //     document.getElementById("OrderId").value = ++counter;
+  //     document.getElementById("OrderId").value = "Order"+document.getElementById("OrderId").value
+  //   });
+
+
+  function writeData(){
+
+    var theOrderShopName = document.getElementById("theOrderShopName").value;
+    var OrderId = document.getElementById("OrderId").value;
+    var OrderName = document.getElementById("OrderName").value;
+    var TEL = document.getElementById("TEL").value;
+    var Address = document.getElementById("Address").value;
+    var OrderTime = document.getElementById("OrderTime").value;
+    var OrderStatus = document.getElementById("OrderStatus").value;
+    database.ref("Orders/"+OrderId).set({
+      theOrderShopName:theOrderShopName,
+      OrderId:OrderId,
+      OrderStatus:OrderStatus,
+      OrderInfo:{
+        OrderMainName:OrderName,
+        TEL : TEL,
+        Address : Address,
+        OrderTime : OrderTime
+      }
+    });
+
+initBento();
+check();
+document.getElementById("a_tab2").click();  ////tab轉到訂餐
+
+    var submit_btn = document.getElementById("submit");
+    submit_btn.disabled = true;
+    submit_btn.value = "開始訂餐";
+  }
+
+
+
+
+//////////////////read people orders////////////////////////
+
+
+
+
+function check(){
+var OrderId = document.getElementById("OrderId").value;
+
+database.ref("Orders/"+OrderId+"/OrderDetail/").on("value", function(snapshot) {
+
+  var DetailBentoNum = snapshot.numChildren()-1;
+  document.getElementById("joinPeople").innerHTML="";
+  for(var i = 1 ;i<=DetailBentoNum ; i++){
+
+    // var a = snapshot.child("Bento"+i+"/"+"name").val();
+    // document.getElementById("joinPeople").innerHTML+=JSON.stringify(a)+"<br>";
+
+
+    var query = firebase.database().ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/").orderByKey();
+    query.once("value").then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+
+          var key = childSnapshot.key;
+
+          var childNumber = childSnapshot.child("number").val();
+          var childPrice = childSnapshot.child("price").val();
+          var childTotal = childSnapshot.child("total").val();
+          var childBento = childSnapshot.child("name").val();
+          if(childNumber!=0){
+          document.getElementById("joinPeople").innerHTML+="<div class='row'><div class='col s12'><b><p>"+key+":"+childBento+"</p></b><p>數量:"+childNumber+" 價格:"+childPrice+" 小計:"+childTotal+"</p></div></div><hr>";
+          }
+      });
+    });
+
+
+  }
+
+});
+
+
+
+document.getElementById("joinPeopleCard").style = "display:show;";
+}
+  ///////////////send order (change status)//////////////////////
+function send(){
+  var OrderId = document.getElementById("OrderId").value;
+
+var OrderStatusRef = database.ref('Orders/'+OrderId);
+OrderStatusRef.child('OrderStatus').set(1);
+      swal("成功","已送出訂單","success").then((value)=>{
+        window.location="./success.html";
+      });
+
+var OrderListNumber = localStorage.getItem("OrderListNumber");
+
+var theOrderShopName = document.getElementById("theOrderShopName").value;
+var OrderId = document.getElementById("OrderId").value;
+
+if(localStorage.getItem("OrderListNumber")===null){
+  localStorage.setItem("OrderListNumber",1);
+  localStorage.setItem("OrderId1",OrderId);
+  localStorage.setItem("OrderListShop1",theOrderShopName);
+}
+
+else{
+  OrderListNumber++;
+  localStorage.setItem("OrderId"+OrderListNumber,OrderId);
+  localStorage.setItem("OrderListShop"+OrderListNumber,theOrderShopName);
+  localStorage.setItem("OrderListNumber",OrderListNumber);
+  }
+
+
+
+}
+
+//////////////////////////////////
+
+</script>
+<script type="text/javascript">
+$('.timepicker').pickatime({
+default: 'now', // Set default time: 'now', '1:30AM', '16:30'
+fromnow: 0,       // set default time to * milliseconds from now (using with default = 'now')
+twelvehour: false, // Use AM/PM or 24-hour format
+donetext: 'OK', // text for done-button
+cleartext: 'Clear', // text for clear-button
+canceltext: 'Cancel', // Text for cancel-button
+autoclose: false, // automatic close timepicker
+ampmclickable: true, // make AM PM clickable
+aftershow: function(){} //Function for after opening timepicker
+});
+</script>
+
+<script type="text/javascript">
+//////////getURL///
+function getURL() {
+    var url = location.href;
+    var decode = decodeURIComponent(url);
+    var temp = decode.split("?");
+    var vars = temp[1].split("&");
+    console.log(vars[0]);
+    document.getElementById("OrderId").value=vars[0];
+    return vars[0];
+ }
+ getURL();
+//////////////////
+
+</script>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+{
+    "prepare_queue": {
+        "installed": [],
+        "uninstalled": []
+    },
+    "config_munge": {
+        "files": {
+            "res/xml/config.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<feature name=\"QRScanner\"><param name=\"android-package\" value=\"com.bitpay.cordova.qrscanner.QRScanner\" /></feature>",
+                            "count": 1
+                        }
+                    ]
+                }
+            },
+            "AndroidManifest.xml": {
+                "parents": {
+                    "/*": [
+                        {
+                            "xml": "<uses-permission android:name=\"android.permission.CAMERA\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.camera\" android:required=\"false\" />",
+                            "count": 1
+                        },
+                        {
+                            "xml": "<uses-feature android:name=\"android.hardware.camera.front\" android:required=\"false\" />",
+                            "count": 1
+                        }
+                    ]
+                }
+            }
+        }
+    },
+    "installed_plugins": {
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-device": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-network-information": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-dialogs": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-splashscreen": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-inappbrowser": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-geolocation": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-statusbar": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-bluetoothle": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "org.jshybugger.cordova": {
+            "PACKAGE_NAME": "com.bento"
+        },
+        "cordova-plugin-qrscanner": {
+            "PACKAGE_NAME": "com.bento"
+        }
+    },
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "com.bento"
+        }
+    }
+}

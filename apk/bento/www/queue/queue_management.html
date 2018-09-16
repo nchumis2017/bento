@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>餐廳號碼牌管理</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+
+    <script>
+        $(document).ready(function () {
+
+            $('select').material_select();
+            $('.modal').modal();
+        });
+    </script>
+    <style>
+        :root{
+            --token-width: 100px;
+            --token-height: 100px; 
+            
+        }
+        
+        body {
+            background-color: #ffcc80
+        }
+        .token{
+            width: var(--token-width);
+            height: var(--token-height);
+            background-color: #bbdefb;
+            border-radius: 100%;
+            text-align: center;
+            box-shadow: 0 0 30px #424242;
+        }
+        .token span{
+            line-height: var(--token-height);
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+            authDomain: "nchumis2017-5566.firebaseapp.com",
+            databaseURL: "https://nchumis2017-5566.firebaseio.com",
+            projectId: "nchumis2017-5566",
+            storageBucket: "nchumis2017-5566.appspot.com",
+            messagingSenderId: "501160127423"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+    </script>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Logo</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <script>
+        queueRef = database.ref("/Queue");
+        queueRef.on("value", function(snapshot){
+            var obj = snapshot.val();
+            var str = "";
+            $.each(obj, function(key, value){
+                if(key == 'counter')
+                    return;
+                str += '<h3>'+key+'</h3>';
+                str += '<div class="row">'
+                // console.log(Object.keys(value));
+                $.each(value, function(k, v){
+                    str += '<div class="token" onclick="javascript:token_info(\'' + key + '/' + k +'\')"><span>'+k+'</span></div>';
+                    // console.log(k +"XXXX"+ JSON.stringify(v));
+                    
+                });
+                str += '</div>';
+            });
+            $('#showQueue').append(str);
+        });
+
+        function token_info(tokenLink){
+            var tokenRef = database.ref("Queue/"+tokenLink);
+            
+            var edit_str = "";
+            tokenRef.once('value', function (snapshot) {
+                $('#modal1-content').empty();
+                var obj = snapshot.val();
+                edit_str += '<h4>序號：' + obj.reservationID + '號</h4>';
+                edit_str += '<h4>訂位人：' + obj.reservationName + '</h4>';
+                edit_str += '<h4>人數：' + obj.reservationNumPeople + '人</h4>';
+                edit_str += '<h4>聯絡電話：' + obj.reservationTelephone + '</h4>';
+               
+            });
+            $('#modal1-content').append(edit_str);
+            $('#modal1').modal('open');
+        }
+ 
+ 
+
+    </script>
+    <div id="showQueue">
+        
+    </div>
+    <div id="modal1" class="modal">
+        <div id="modal1-content" class="modal-content">
+    
+        </div>
+        <div class="modal-footer">
+            <a href="#!" id="edit_submit" class="modal-action modal-close waves-effect waves-green btn">更新</a>
+        </div>
+    </div>
+</body>
+
+</html>

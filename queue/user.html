@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>領取號碼牌</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script>
+      $(document).ready(function () {
+            $('select').material_select();
+      });
+    </script>
+</head>
+<body>
+    <script>
+        var config = {
+            apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+            authDomain: "nchumis2017-5566.firebaseapp.com",
+            databaseURL: "https://nchumis2017-5566.firebaseio.com",
+            projectId: "nchumis2017-5566",
+            storageBucket: "nchumis2017-5566.appspot.com",
+            messagingSenderId: "501160127423"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+    </script>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo" style="margin-left: 45%">領取號碼牌</a>
+            <!-- <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul> -->
+        </div>
+    </nav>
+    <div id="app" ></div>
+    <script>
+        if (localStorage.getItem('token') !== null)
+        {
+            let token = JSON.parse(localStorage.getItem("token"));
+            let str = '<div class="container"><div class="row">';
+            str += '<h2>' + token.reservationID +'</h2><img src="tag.svg" alt="" width="100%!important" height="100%!important">';
+            str += '</div></div>';
+            $('#app').append(str);
+        }
+        else 
+        {
+            let str = '<div class="container">';
+            str += '<div class="row">';
+            str += '<form class="col s12">';
+            str += '<div class="row">';
+            str += '<div class="input-field col s12">';
+            str += '<i class="material-icons prefix">account_circle</i>';
+            str += '<input id="reservation_name" type="text" class="validate">';
+            str += '<label for="reservation_name">First Name</label></div>';
+            str += '<div class="row">';
+            str += '<div class="input-field col s12">';
+            str += '<i class="material-icons prefix">phone</i>';
+            str += '<input id="reservation_telephone" type="tel" class="validate">';
+            str += '<label for="reservation_telephone">Telephone</label></div></div>';
+            str += '<div class="input-field col s12">';
+            str += '<select id="reservation_num_people">';
+            str += '<option value="" disabled selected>選擇您的人數</option>';
+            str += '<option value="1P">1 人</option>';
+            str += '<option value="2P">2 人</option>';
+            str += '<option value="3P">3 人</option>';
+            str += '<option value="4P">4 人</option>';
+            str += '<option value="5P">5 人以上</option>';
+            
+            str += '</select>';
+            str += '</div>';
+            str += '<button class="btn waves-effect waves-light right" id="submit_btn">Submit';
+            str += '<i class="material-icons right">send</i></button>';
+            str += '</div></form></div></div>';
+            $('#app').append(str);
+        
+        }
+        var counter = 0;
+        var queueRef = database.ref("Queue");
+        queueRef.child('counter').on('value', function(snapshot){
+            counter = snapshot.val();
+        });
+        $('#submit_btn').on('click', function(){
+            counter++;
+            var obj = {
+                reservationID: counter,
+                reservationName: $('#reservation_name').val(),
+                reservationTelephone: $('#reservation_telephone').val(),
+                reservationNumPeople: $('#reservation_num_people').val()
+            };
+            queueRef.child($('#reservation_num_people').val()+"/"+counter).set(obj);
+            queueRef.child('counter').set(counter);
+            localStorage.setItem("token", JSON.stringify(obj));
+        });
+
+        // var obj = {
+        //         1: {Name:"Ama", Phone:"097777777", Num:4},
+        //         2: {Name: "Sheep", Phone: "09888888", Num: 3}
+        //     };
+            
+        // localStorage.setItem("token", JSON.stringify(obj));
+        // var token = localStorage.getItem("token");
+        // var a = JSON.parse(token);
+        // console.log(a['1']);
+
+    </script>
+</body>
+</html>

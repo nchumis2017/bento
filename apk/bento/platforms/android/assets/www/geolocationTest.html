@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <title></title>
+  <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyAzUkUrvdaygSJamPdIUkADw4qTuosDjkw"></script>
+
+</head>
+
+<body>
+  <script type="text/javascript">
+    var geocoder = new google.maps.Geocoder();
+
+    // google.maps.LatLng 物件
+    var coord = new google.maps.LatLng(25.0439892, 121.5212213);
+
+    // 傳入 latLng 資訊至 geocoder.geocode
+    geocoder.geocode({
+      'latLng': coord
+    }, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        // 如果有資料就會回傳
+        if (results) {
+          console.log(results[0].formatted_address);
+        }
+      }
+      // 經緯度資訊錯誤
+      else {
+        alert("Reverse Geocoding failed because: " + status);
+      }
+    });
+  </script>
+
+  <script type="text/javascript">
+    function distance(lat1, lon1, lat2, lon2) {
+      var R = 6371; // km (change this constant to get miles)
+      var dLat = (lat2 - lat1) * Math.PI / 180;
+      var dLon = (lon2 - lon1) * Math.PI / 180;
+      var a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+        Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+        Math.sin(dLon / 2) * Math.sin(dLon / 2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+      var d = R * c;
+      if (d > 1) return Math.round(d) + "km";
+      else if (d <= 1) return Math.round(d * 1000) + "m";
+      return d;
+    }
+    console.log(distance(25.0439892, 121.5212213, 25.1439892, 121.42912214));
+  </script>
+</body>
+
+</html>

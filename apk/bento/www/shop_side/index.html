@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzUkUrvdaygSJamPdIUkADw4qTuosDjkw" async defer></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+<style media="screen">
+body{
+  background-image: url("./main.jpg");
+
+}
+a{
+  color:black;
+  text-decoration: none;
+
+}
+.font1{
+  color:white;
+  font-size: 22px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
+.font2{
+  color:white;
+  font-size: 20px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
+
+
+
+td{
+  text-align: center;
+}
+</style>
+
+    <title>BENTO</title>
+  </head>
+  <body>
+
+
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper #ab47bc purple lighten-1'>
+        <a href='./index.html' class='brand-logo'>BENTO店家端</a>
+
+
+      </div>
+    </nav>
+    <script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+
+<div class="container">
+
+<div class="card " style="margin-top:40%;">
+  <div class="card-content container">
+
+
+    <form class="" action="javascript:form_confirm()" method="post">
+      <div class="row">
+        <div class="input-field col s12">
+          <input type="text" id="account" name="account" value="">
+          <label for="address">帳號</label>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="input-field col s12">
+          <input type="password" id="pwd" name="pwd" value="">
+          <label for="address">密碼</label>
+        </div>
+      </div>
+
+      <div class="row" style="text-align:center;">
+        <button type="button" class="btn #e1bee7 purple lighten-4" name="button" onclick="location.href='joinUS/joinUS.html'">加入我們</button>
+
+        <input type="submit" class="btn #ba68c8 purple lighten-2" name="" value="登入">
+      </div>
+
+    </form>
+  </div>
+</div>
+
+</div>
+
+  </body>
+
+
+<script type="text/javascript">
+  function form_confirm(){
+    var form_a = document.getElementById("account").value;
+    var form_b = document.getElementById("pwd").value;
+
+    if(form_a!="abc" || form_b!="123"){
+        setTimeout(function(){swal("帳密錯誤");},500);
+    }
+    else{
+      setTimeout(function(){
+        swal("歡迎回來");
+        setTimeout(function(){  location.href="../restaurant_receive.html";},300)
+
+      },500);
+    }
+  }
+</script>
+
+
+
+
+
+
+</html>

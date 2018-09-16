@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <script src="../js/jquery-3.2.1.min.js" ></script>
+      <link rel="stylesheet" href="../css/materialize.min.css">
+      <script src="../js/materialize.min.js"></script>
+
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <script src="../js/d3.v3.min.js" async defer></script>
+
+    <!-- <link rel="stylesheet" href="../css/main.css"> -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzUkUrvdaygSJamPdIUkADw4qTuosDjkw" async defer></script>
+<style media="screen">
+#map {
+   height: 350px;
+ }
+body{
+  font-family: microsoft jhenghei;
+  font-weight: bold;
+}
+td{
+}
+
+th{
+  text-align: center;
+  font-weight: bolder;
+}
+.td_center{
+  text-align: center;
+  width: 50%;
+}
+
+path {
+	stroke: DodgerBlue;
+	stroke-width: 1;
+	fill: none;
+}
+.axis {
+	font-size: 11px;
+	fill: gray;
+}
+
+.x.axis line {
+  stroke: lightgrey;
+}
+
+.x.axis .minor {
+  stroke-opacity: .5;
+}
+
+.x.axis path {
+  stroke: #fafafa;
+}
+
+.y.axis line, .y.axis path {
+  fill: none;
+  stroke: lightgrey;
+}
+</style>
+
+    <title>查看訂單</title>
+  </head>
+
+
+  <body>
+
+
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <div  style="float:left;position:relative;z-index:1; margin:0 18px;" onclick="javascript:modal_open()"><i class='material-icons'>info_outline</i></div>
+
+      </div>
+    </nav>
+
+    <script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+
+
+
+<div class="" id="div_order_content">
+
+  <!-- <h5><p id="p_info">目前沒有訂單</p></h5> -->
+<div class="container">
+  <h5 style="font-weight:bolder;text-align:center;" id="h5_title">訂單狀態</h5>
+</div>
+
+
+<div class="row" style="margin-bottom:0px;">
+  <table style="border:1px">
+    <tr>
+      <td id="OrderStatus_1" style="background-color:#eeeeee;text-align:center;">接收訂單</td>
+      <td id="OrderStatus_2" style="background-color:#eeeeee;text-align:center;">餐點製作</td>
+      <td id="OrderStatus_3" style="background-color:#eeeeee;text-align:center;">正在外送</td>
+      <td id="OrderStatus_4" style="background-color:#eeeeee;text-align:center;">訂單完成</td>
+    </tr>
+    <tr>
+      <td colspan="4" style="padding-top:0px;padding-bottom:0px;">
+        <div class="progress">
+          <div id="progressBarDiv" class="determinate" style="width:0%"></div>
+        </div>
+      </td>
+    </tr>
+  </table>
+
+</div>
+
+
+
+  <div class="card" style="margin-top:0px;">
+
+    <div class="card-tabs">
+      <ul class="tabs tabs-fixed-width">
+        <li class="tab"><a href="#test4">訂單資訊</a></li>
+        <li class="tab"><a href="#test5">外送狀態</a></li>
+        <li class="tab"><a href="#test6">團購收費</a></li>
+      </ul>
+    </div>
+    <div class="card-content grey lighten-4" style="padding-top:12px;padding-bottom:12px;">
+      <div id="test4">
+
+<div class="card">
+  <div class="card-content">
+
+
+        <table class="highlight">
+          <tr>
+          <td width="40%">訂單序號</td><td id="OrderId"></td>
+          </tr>
+          <tr>
+          <td width="40%">訂餐人</td><td id="OrderMainName"></td>
+          </tr>
+          <tr>
+            <td width="40%">送餐地址</td><td id="Address"></td>
+          </tr>
+          <tr>
+            <td width="40%">預計送餐時間</td><td id="OrderTime"></td>
+          </tr>
+
+
+
+        </table>
+        <table >
+          <tr>
+            <td colspan="2" style="text-align:center;"><hr>訂購餐點</td>
+          </tr>
+          <tr style="background-color:#f2f2f2;">
+            <th>品項</th><th>數量</th>
+          </tr>
+
+        </table>
+        <table class="highlight" id="OrderDetail_inTable">
+
+        </table>
+
+  </div>
+</div>
+      </div>
+      <div id="test5">
+        <div class="card" style="padding-bottom:20px;">
+          <h5 style="text-align:center; padding:30px;" id="not_yet_info_in_status_3">尚未外送...請耐心等候</h5>
+
+          <div class="" id="delivery_when_status_3">
+
+              <!-- GOOGLE MAP -->
+            <div id="map" ></div>
+            <script>
+              var map;
+              function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                  center: {lat: 24.121752, lng: 120.676264},
+                  zoom: 15
+                });
+              }
+
+              $("#delivery_when_status_3").hide();
+            </script>
+            <table class="highlight" style=>
+              <tr>
+                <td colspan="2" style="padding-left:20px;padding-right:20px; padding-bottom:0px;">餐點狀態
+                  <hr>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding-top:0px; padding-left:20px; width:20%" >溫度</td><td id="td_temperature" style="padding-top:0px;"></td>
+              </tr>
+              <tr>
+                <td style="padding-top:0px; padding-left:20px; width:20%">濕度</td><td id="td_humidity" style="padding-top:0px;"></td>
+              </tr>
+            </table>
+
+            <h4 style="padding-left:20px;">溫度表</h4>
+            <div id="chart">
+
+            </div>
+
+        </div>
+      </div>
+
+
+
+
+      </div>
+      <div id="test6">
+        <div class="card">
+
+        <div class="card-content" id="joinPeople">
+          <form action="#">
+
+
+
+
+          </form>
+
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <h4 id="OrderListShop_h4_inModal"></h4>
+    <hr>
+    <table class="highlight">
+      <tr>
+        <td>電話</td><td id="TEL_inModal">04-22882288</td>
+      </tr>
+      <tr>
+        <td>地址</td><td id="address_inModal">台中市南區興大路140號</td>
+      </tr>
+
+    </table>
+
+  </div>
+  <div class="modal-footer">
+    <div class="modal-action modal-close waves-effect waves-green btn-flat">OK</div>
+  </div>
+</div>
+<!-- . -->
+
+  </body>
+
+
+
+
+
+<script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+
+<script type="text/javascript">
+var url = location.href;
+var decode = decodeURIComponent(url);
+var temp = decode.split("?");
+var vars = temp[1].split("&");
+console.log(vars[0]+","+vars[1]);
+document.getElementById("OrderListShop_h4_inModal").innerHTML = vars[1];
+document.getElementById("OrderId").innerHTML = vars[0];
+var shop_i;
+
+    // var config = {
+    //   apiKey: "AIzaSyDHJvCW6LwYl0fih2PynaWmX3fYGqmel00",
+    //   authDomain: "all-store-a0408.firebaseapp.com",
+    //   databaseURL: "https://all-store-a0408.firebaseio.com",
+    //   projectId: "all-store-a0408",
+    //   storageBucket: "",
+    //   messagingSenderId: "982261178985"
+    // };
+    // firebase.initializeApp(config);
+    //
+    // var database = firebase.database();
+    //
+    // database.ref("stores").once("value",function(snapshot){
+    //   var shop_counter = snapshot.child("counter").val();
+    //   console.log(shop_counter);
+    //   for(var i = 1 ; i<=shop_counter ; i++){
+    //     var shopName = snapshot.child("shop"+i+"/shopName").val();
+    //     console.log(shopName);
+    //     if(vars[1]==shopName){
+    //       shop_i = i;
+    //       document.getElementById("TEL_inModal").innerHTML = snapshot.child("shop"+shop_i+"/shopInfo/tel").val();
+    //       document.getElementById("address_inModal").innerHTML = snapshot.child("shop"+shop_i+"/shopInfo/address").val();
+    //     }
+    //   }
+    // });
+
+</script>
+
+
+
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+  // the "href" attribute of the modal trigger must specify the modal ID that wants to be triggered
+  $('.modal').modal();
+});
+function modal_open(){
+  $(document).ready(function(){
+    $('#modal1').modal('open');
+
+  });
+}
+</script>
+
+
+<script type="text/javascript">
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+  authDomain: "nchumis2017-5566.firebaseapp.com",
+  databaseURL: "https://nchumis2017-5566.firebaseio.com",
+  projectId: "nchumis2017-5566",
+  storageBucket: "nchumis2017-5566.appspot.com",
+  messagingSenderId: "501160127423"
+};
+firebase.initializeApp(config);
+
+
+/////////////////初始化////////////////////
+
+var database = firebase.database();
+
+console.log("Orders/"+vars[0]);
+
+
+database.ref("Orders/"+vars[0]).on("value",function(snapshot){
+  document.getElementById("OrderMainName").innerHTML = snapshot.child("OrderInfo/OrderMainName").val();;
+  document.getElementById("Address").innerHTML = snapshot.child("OrderInfo/Address").val();
+  document.getElementById("OrderTime").innerHTML = snapshot.child("OrderInfo/OrderTime").val();
+
+
+  ///////////////////on  OrderStatus //////////////////////////
+  var OrderStatus = snapshot.child("OrderStatus").val();
+  if(OrderStatus==1){
+    document.getElementById("progressBarDiv").style.width = "24.2%";
+    var temp = document.getElementById("OrderStatus_1");
+    temp.style.backgroundColor = "#9e9e9e";
+    temp.color = "white";
+  }
+  else if(OrderStatus==2){
+    document.getElementById("progressBarDiv").style.width = "50%";
+    var temp = document.getElementById("OrderStatus_2");
+    temp.style.backgroundColor = "#9e9e9e";
+    temp.color = "white";
+  }
+  else if(OrderStatus==3){
+    document.getElementById("progressBarDiv").style.width = "75.8%";
+    var temp = document.getElementById("OrderStatus_3");
+    temp.style.backgroundColor = "#9e9e9e";
+    temp.color = "white";
+
+
+        ///////////////////GOOGLE MAP+sensor///////////////
+        $("#delivery_when_status_3").show();
+        $("#not_yet_info_in_status_3").hide();
+        initMap();
+
+      database.ref("sensor").on("value",function(snapshot){
+        var temperature = snapshot.child("temperature").val();
+        var humidity = snapshot.child("humidity").val();
+        document.getElementById("td_temperature").innerHTML = temperature;
+        document.getElementById("td_humidity").innerHTML = humidity;
+      });
+  }
+  else if(OrderStatus==4){
+    document.getElementById("progressBarDiv").style.width = "100%";
+    var temp = document.getElementById("OrderStatus_4");
+    temp.style.backgroundColor = "#9e9e9e";
+    temp.color = "white";
+  }
+
+
+    ///////////////////on  OrderStatus //////////////////////////
+
+var BentoCounter = snapshot.child("OrderDetail/").numChildren()-1;
+//////////bento1 bento2 bento3 and time column  so  -1/////////////
+
+console.log(BentoCounter);
+for(var j = 1 ; j <= BentoCounter ; j++){
+  var temp = snapshot.child("OrderDetail/Bento"+j+"/name/").val();
+  var BentoName = [];
+  BentoName[j] = temp;
+
+  var Bento_j_counter = [];
+  Bento_j_counter[j] = 0;
+
+  // console.log(BentoName[j]);
+  snapshot.child("OrderDetail/Bento"+j+"/OrderPeople/").forEach(function(childSnapshot){
+    var peopleName = childSnapshot.key;
+    var  child_isPaid = childSnapshot.child("isPaid").val();
+    var  child_name = childSnapshot.child("name").val();
+    var  child_number = parseInt(childSnapshot.child("number").val());
+    var  child_price = childSnapshot.child("price").val();
+    var  child_total = childSnapshot.child("total").val();
+    Bento_j_counter[j] = child_number+Bento_j_counter[j];
+
+  });
+  // console.log(BentoName[j]+","+Bento_j_counter[j]);
+  document.getElementById("OrderDetail_inTable").innerHTML += "<tr><td class='td_center'>"+BentoName[j]+"</td><td class='td_center'>"+Bento_j_counter[j]+"</td></tr>";
+}
+
+
+});
+
+</script>
+
+
+<script type="text/javascript">
+function TimeFunction(){
+  var theDate = new Date();
+  var theTime = theDate.getTime();
+
+  var OrderId = document.getElementById("OrderId").value;
+
+  database.ref("Orders/"+vars[0]+"/OrderDetail/time/").set(theTime);
+}
+
+function isPaid_checkbox_onclick(key,counter,bento_i){
+/////////目前傳進的bento_i傳進的值有問題 解決方法 子目錄下增加欄位/////////
+  var isChecked = document.getElementById("indeterminate-checkbox"+counter).checked;
+
+
+  database.ref("Orders/"+vars[0]+"/OrderDetail/").once("value",function(snapshot){
+    var isPaid = snapshot.child("Bento"+bento_i+"/OrderPeople/"+key+"/isPaid").val();
+    database.ref("Orders/"+vars[0]+"/OrderDetail/"+"Bento"+bento_i+"/OrderPeople/"+key+"/isPaid").set(++isPaid);
+  });
+
+  // if(isChecked==false){
+  // dd.child("Bento"+bento_i+"/OrderPeople/"+key+"/isPaid").set(1);
+  // }
+  // else if(isChecked==true){
+  //   dd.child("Bento"+bento_i+"/OrderPeople/"+key+"/isPaid").set(0);
+  // }
+
+}
+
+database.ref("Orders/"+vars[0]+"/OrderDetail").once("value", function(snapshot) {
+
+  var DetailBentoNum = snapshot.numChildren()-1;
+  document.getElementById("joinPeople").innerHTML="";
+  for(var i = 1 ;i<=DetailBentoNum ; i++){
+
+    var counter = 0;
+    // var bento_i = i-1;
+
+    var query = firebase.database().ref("Orders/"+vars[0]+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/").orderByKey();
+    query.once("value").then(function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
+          counter++;
+          var key = childSnapshot.key;
+          var childNumber = childSnapshot.child("number").val();
+          var childPrice = childSnapshot.child("price").val();
+          var childTotal = childSnapshot.child("total").val();
+          var childBento = childSnapshot.child("name").val();
+          var isPaid = childSnapshot.child("isPaid").val();
+          var bento_i = childSnapshot.child("bento_i").val();
+          if(childNumber!=0){
+            if(isPaid%2==1){
+              document.getElementById("joinPeople").innerHTML+="<div class='row'><div class='col s12'><b><p>"+key+":"+childBento+"</p></b><p>數量:"+childNumber+" 價格:"+childPrice+" 小計:"+childTotal+"</p><p><input type='checkbox' id='indeterminate-checkbox"+counter+"' checked/><label for='indeterminate-checkbox"+counter+"' onclick='javascript:isPaid_checkbox_onclick(\""+key+"\","+counter+","+bento_i+")'>已付清</label></p></div></div><hr>";
+            }
+            else if(isPaid%2==0){
+          document.getElementById("joinPeople").innerHTML+="<div class='row'><div class='col s12'><b><p>"+key+":"+childBento+"</p></b><p>數量:"+childNumber+" 價格:"+childPrice+" 小計:"+childTotal+"</p><p><input type='checkbox' id='indeterminate-checkbox"+counter+"'/><label for='indeterminate-checkbox"+counter+"' onclick='javascript:isPaid_checkbox_onclick(\""+key+"\","+counter+","+bento_i+")'>已付清</label></p></div></div><hr>";
+            }
+          }
+      });
+    });
+
+
+  }
+
+});
+</script>
+
+<script>
+
+function chart(){
+  window.addEventListener('load',function(){
+
+    var data=[
+      {x:1, w:250},
+      {x:2, w:220},
+      {x:3, w:180},
+      {x:4, w:170},
+      {x:5, w:160},
+    ];
+
+    var s = d3.select('#delivery_when_status_3')
+              .append('svg')
+              .attr({
+                'width':300,
+                'height':200
+              });
+
+    s.selectAll('rect')
+     .data(data)
+     .enter()
+     .append('rect')
+     .attr({
+      'fill':'#09c',
+      'width':function(d){
+        return d.w;
+      },
+      'height':30,
+      'x':0,
+      'y':function(d){
+        return (d.x-1) * 35;
+      }
+     });
+
+  },false);
+  }
+
+
+
+function chart2(){
+var margin = {top: 10, right: 40, bottom: 50, left: 30};
+var w = document.getElementById("h5_title").offsetWidth-55;  // 寬
+var h = 300 ; // 高
+
+
+var dataset = [62,30,30]; //建立空的資料陣列
+// var Num = 80;
+// for (var i=0; i < 10; i++){
+// 	var newNum = Num - ( Math.floor(Math.random() * 6));
+// 	dataset.push(newNum);
+// 	Num = newNum;
+// }
+//隨機產生一組隨機的數字陣列，數字的值，每次加減不超過5
+//X是資料的數量，Y則是資料的值
+
+console.log(dataset);
+
+var Ymax = 80,
+	Ymin = 0;
+
+var xScale = d3.scale.linear().domain([1, 10]).range([0, w]);
+
+var yScale = d3.scale.linear().domain([Ymin, Ymax]).range([h, 0]);
+
+
+// 增加一個line function，用來把資料轉為x, y
+var line = d3.svg.line()
+	.x(function(d,i) {
+		return xScale(i + 1); //利用尺度運算資料索引，傳回x的位置
+	})
+	.y(function(d) {
+		return yScale(d); //利用尺度運算資料的值，傳回y的位置
+	});
+
+//增加一個SVG元素
+var svg = d3.select('#chart').append('svg')
+	.attr('width', w + margin.left + margin.right) //將左右補滿
+	.attr('height', h + margin.top + margin.bottom) //上下補滿
+	.append('g') //增加一個群組g
+	.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
+
+// 增加x軸線，tickSize是軸線的垂直高度，-h會往上拉高
+// tickSubdivide不清楚是什麼用處
+var xAxis = d3.svg.axis().scale(xScale).orient('bottom').tickSize(-h).tickSubdivide(true);
+// SVG加入x軸線
+svg.append('g')
+	.attr('class', 'x axis')
+	.attr('transform', 'translate(0,' + h + ')')
+	.call(xAxis);
+
+
+// 建立y軸線，4個刻度，數字在左
+var yAxisLeft = d3.svg.axis().scale(yScale).ticks(4).orient('left');
+// SVG加入y軸線
+svg.append('g')
+	.attr('class', 'y axis')
+	.attr('transform', 'translate(0,0)')
+	.call(yAxisLeft);
+
+svg.append('path').attr('d', line(dataset)); //將資料套用d3.svg.line()
+}
+
+chart2();
+
+
+</script>
+</html>

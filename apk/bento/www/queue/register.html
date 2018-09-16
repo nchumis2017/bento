@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+
+<style media="screen">
+  div{
+    text-align: center;
+    font-family: microsoft jhenghei;
+
+  }
+</style>
+
+    <title>index</title>
+  </head>
+  <body>
+
+    <!-- navbar -->
+    <!-- <div id="navbar"></div> -->
+
+    <!-- <script type="text/javascript">
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", "/navbar.html", false);
+    ajax.send();
+    document.getElementById("navbar").innerHTML += ajax.responseText;
+    </script>
+    <script type="text/javascript">$(".button-collapse").sideNav();</script> -->
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+      </div>
+    </nav>
+    </div>
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+
+  <!-- navbar -->
+
+<br>
+
+      <div class="container">
+
+      <div class="card">
+        <br><br>
+
+          <h3>目前號碼</h3>
+          <h2>
+          <a href="#" id="currentNum">0</a>
+          </h2>
+          <br>
+          <button  class="btn" onclick="javascript:btn_click()">抽號碼牌</button>
+          <br>
+          <br>
+
+
+
+      <div class="queue">
+        <table class="centered">
+       <thead>
+         <tr>
+             <th>ID</th>
+             <th>Status</th>
+             <th>BTN</th>
+         </tr>
+       </thead>
+
+       <tbody id="queue_table">
+
+       </tbody>
+     </table>
+      </div>
+      <br>
+
+
+    </div>
+</div>
+
+<button type="button" class="btn" onclick="javascript:reset()">reset</button>
+
+  </body>
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+      authDomain: "nchumis2017-5566.firebaseapp.com",
+      databaseURL: "https://nchumis2017-5566.firebaseio.com",
+      projectId: "nchumis2017-5566",
+      storageBucket: "nchumis2017-5566.appspot.com",
+      messagingSenderId: "501160127423"
+    };
+    firebase.initializeApp(config);
+
+
+    /////////////////初始化////////////////////
+
+    var database = firebase.database();
+    //////////////取得目前號碼/////////////
+
+    database.ref("Queue/").on("value",function(snapshot){
+      document.getElementById('queue_table').innerHTML="";
+
+      var counter = snapshot.child("counter").val();
+
+      document.getElementById("currentNum").innerHTML=counter;
+
+      for(var i = 1 ;i<=counter ; i++){
+
+        var id = snapshot.child(i+'/id').val();
+        var status = snapshot.child(i+'/status').val();
+
+        document.getElementById('queue_table').innerHTML+="<tr><td>"+id+"</td><td id='status"+i+"'>"+status+"</td><td><button class='btn' onclick='javascript:change_status("+i+")'>CLICK</button></td></tr>";
+      }
+    });
+    /////////////////////////////////
+    function change_status(i){
+      database.ref("Queue/"+i+"/status").set(1);
+
+
+      Materialize.toast("輪到"+i+"號", 4000);
+
+
+    }
+////////////////////////////////////////
+
+
+
+
+//////////////////////////////////////
+function btn_click(){
+var counter = document.getElementById("currentNum").innerHTML;
+counter = parseInt(counter);
+counter++;
+console.log(counter);
+
+database.ref("Queue/"+counter).set({
+  id : counter,
+  status : 0
+});
+database.ref("Queue/counter").set(counter);
+
+Materialize.toast("您是"+counter+"號", 4000);
+
+}
+
+function reset(){
+  database.ref("Queue").set({
+    counter : 0
+  });
+}
+
+    </script>
+</html>

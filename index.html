@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="./js/jquery-3.2.1.min.js" ></script>
+    <link rel="stylesheet" href="./css/materialize.min.css">
+    <script src="./js/materialize.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzUkUrvdaygSJamPdIUkADw4qTuosDjkw" async defer></script>
+<style media="screen">
+body{
+}
+a{
+  color:black;
+  text-decoration: none;
+
+}
+.font1{
+  color:white;
+  font-size: 22px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
+.font2{
+  color:white;
+  font-size: 20px;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
+
+
+
+td{
+  text-align: center;
+}
+</style>
+
+    <title>BENTO</title>
+  </head>
+  <body>
+
+
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='./index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>個人資訊</a></li>
+          <li><a href='#'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li class="#00838f cyan darken-4" ><a href='#' style="color:white;">WELCOME</a></li>
+          <li> <img src="./image/test.png" height="120px" style="margin-top:20px; margin-bottom:10px;"> </li>
+          <div class="container"><hr></div>
+          <li><a href='./sideNav/personInfo.html'>個人資訊</a></li>
+          <li><a href='./sideNav/address.html'>常用地址</a></li>
+          <li><a href='#'>關於我們</a></li>
+        </ul>
+      </div>
+    </nav>
+
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+<div class="">
+
+
+  <!-- navbar -->
+<div class="row" style="margin-bottom:0px!important;border-bottom:9px white solid">
+    <div class="carousel carousel-slider" data-indicators="true">
+      <a class="carousel-item" href="#one!"><img src="./image/banner/banner1-1.jpg"></a>
+      <a class="carousel-item" href="#two!"><img src="./image/banner/banner2.jpg"></a>
+      <a class="carousel-item" href="#three!"><img src="./image/food1.jpg"></a>
+      <a class="carousel-item" href="#four!"><img src="./image/food2.jpg"></a>
+      <a class="carousel-item" href="#five!"><img src="./image/food3.jpg"></a>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+var CurrentName = window.localStorage.getItem("UserName");
+console.log(CurrentName);
+if(CurrentName==null){
+  localStorage.setItem("UserName","主揪人");
+
+}
+
+function autoplay() {
+  $('.carousel').carousel('next');
+  setTimeout(autoplay, 3000);
+}
+autoplay();
+</script>
+
+
+<div class="row" style="margin-bottom:10px;">
+  <i class="tiny material-icons" style="color:blue;">place</i>
+<font style="text-align:center; font-size:18px;font-weight:bold;color:blue;">外送地址</font>
+  <br>
+  <font style="font-size:15px;" id="address">台中市南區中興大學社館大樓</font>
+</div>
+
+
+<div class="row" style="margin-bottom:0px!important;opacity:0.9;border-bottom:1px white solid;">
+
+<a href="./stores.html" >
+  <div class="col s7 waves-effect waves-light" style="border:2px white solid;border-radius:20px;width:(100/12*3)%;background-color:#ffca28;background-image:url('./image/chinesefood-image/food05.jpg'); background-size:cover; background-repeat:no-repeat; padding-top:8vh;padding-bottom:8vh; text-align:center;">
+    <font class="font1" >開始訂餐</font>
+  </div>
+</a>
+
+<a href="./checkOrder/OrderList.html">
+  <div class="col s5 waves-effect waves-light" style="border:2px white solid;border-radius:20px;width:(100/12*3)%;background-color:#bcaaa4;background-image:url('./image/chinesefood-image/food06.jpg'); background-size:cover; background-repeat:no-repeat; padding-top:8vh;padding-bottom:8vh; text-align:center;">
+  <font class="font1">我的訂單</font>
+  </div>
+</a>
+
+
+</div>
+
+
+
+<div class="row" style="margin-bottom:0px;">
+  <ul class="collapsible">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">favorite</i>我的最愛</div>
+      <div class="collapsible-body" style="padding:0px;">
+        <p id="favorite_p_status">目前沒有最愛清單</p>
+        <table class="striped" id="table_favorite">
+
+        </table>
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header" ><i class="material-icons">near_me</i>附近店家</div>
+      <div class="collapsible-body" style="padding:0px;" >
+        <table class='striped' id='table_nearby'>
+
+
+        </table>
+      </div>
+    </li>
+
+  </ul>
+</div>
+
+
+<div class="row" style="margin-bottom:0px!important;opacity:0.9;border-bottom:9px white solid;">
+
+  <div class="col s1">
+
+  </div>
+
+  <a href="./QRcode/Scanner.html">
+    <div class="col s10 waves-effect waves-light" style="border:2px white solid;border-radius:20px;width:(100/3)%;background-color:#4fc3f7;background-image:url('./image/chinesefood-image/food09.jpg'); background-size:cover; background-repeat:no-repeat; padding-top:7vh;padding-bottom:7vh; text-align:center;">
+      <font class="font2">加入團購</font>
+    </div>
+  </a>
+<div class="col s1">
+
+</div>
+
+
+</div>
+
+<div class="row" style="margin-bottom:0px!important;opacity:0.9;border-bottom:9px white solid;">
+
+  <div class="col s1">
+
+  </div>
+
+  <a href="./QRcode/Scanner.html">
+    <div class="col s10 waves-effect waves-light" style="border:2px white solid;border-radius:20px;width:(100/3)%;background-color:#4fc3f7;background-image:url('./image/chinesefood-image/food11.jpg'); background-size:cover; background-repeat:no-repeat; padding-top:7vh;padding-bottom:7vh; text-align:center;">
+      <font class="font2">排隊叫號</font>
+    </div>
+  </a>
+<div class="col s1">
+
+</div>
+
+
+</div>
+
+
+
+<!-- <div class="row" style="margin-bottom:0px!important;opacity:0.9;border-bottom:9px white solid;">
+
+<a href="./Delivery/index.html">
+  <div class="col s6 waves-effect waves-light" style="border:2px white solid;border-radius:20px;width:50%;background-color:#4caf50; background-image:url('./image/food3.jpg'); background-size:cover; background-repeat:no-repeat; padding-top:8vh;padding-bottom:8vh; text-align:center;">
+    <font class="font1">外送人員</font>
+  </div>
+</a>
+
+<a href="./shop_side/index.html">
+  <div class="col s6 waves-effect waves-light" style="border:2px white solid;border-radius:20px;width:50%;background-color:#f06292; background-image:url('./image/food2.jpg'); background-size:cover; background-repeat:no-repeat; padding-top:8vh;padding-bottom:8vh; text-align:center;">
+    <font class="font1">.</font>
+  </div>
+</a>
+
+</div> -->
+
+
+
+
+
+</div>
+
+
+  </body>
+  <script type="text/javascript">
+  $('.carousel.carousel-slider').carousel({fullWidth: true});
+
+  </script>
+  <script>
+var x=document.getElementById("address");
+function getLocation()
+  {
+  if (navigator.geolocation)
+    {
+    navigator.geolocation.getCurrentPosition(showPosition);
+    }
+  else{x.innerHTML="Geolocation is not supported by this browser.";}
+  }
+function showPosition(position)
+  {
+    var geocoder = new google.maps.Geocoder();
+
+    // google.maps.LatLng 物件
+    var coord = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+
+    // 傳入 latLng 資訊至 geocoder.geocode
+    geocoder.geocode({'latLng': coord }, function(results, status) {
+      if (status === google.maps.GeocoderStatus.OK) {
+        // 如果有資料就會回傳
+        if (results) {
+          console.log(results[0].formatted_address);
+          x.innerHTML = results[0].formatted_address;
+          localStorage.setItem("CurrentLocation",results[0].formatted_address);
+        }
+      }
+      // 經緯度資訊錯誤
+      else {
+        swal("無法取得您的位置" + status);
+      }
+    });
+
+
+
+  }
+  getLocation();
+
+
+</script>
+
+
+
+
+
+
+<script src="./js/firebase.js"></script>
+
+<script type="text/javascript">
+    var config = {
+      apiKey: "AIzaSyDHJvCW6LwYl0fih2PynaWmX3fYGqmel00",
+      authDomain: "all-store-a0408.firebaseapp.com",
+      databaseURL: "https://all-store-a0408.firebaseio.com",
+      projectId: "all-store-a0408",
+      storageBucket: "",
+      messagingSenderId: "982261178985"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+    database.ref("stores").once("value").then(function(snapshot){
+      for(var i =1 ; i<=4; i++){
+        var shopName = snapshot.child("shop"+i+"/shopName").val();
+        var shopBriefInfo = snapshot.child("shop"+i+"/shopInfo/briefInfo").val();
+        var table_nearby = document.getElementById("table_nearby");
+        table_nearby.innerHTML+="<tr><td><i class='tiny material-icons'>mood</i>"+shopName+"</td><td>"+shopBriefInfo+"</td><td>"+(7*i*i+9*i+1)+"m</td></tr>";
+      }
+});
+
+</script>
+
+<script type="text/javascript">
+  // localStorage  favorite_store list
+var favorite_counter = localStorage.favorite_store_counter;
+if(favorite_counter>0){
+  var favorite_p_status = document.getElementById("favorite_p_status");
+  favorite_p_status.remove();
+}
+for(var i = 1 ; i<=favorite_counter ; i++){
+
+  var value = window.localStorage.getItem("favorite_store"+i);
+  var table_favorite = document.getElementById("table_favorite");
+  table_favorite.innerHTML+="<tr><td>"+i+"</td><td>"+value+"</td></tr>";
+}
+
+
+</script>
+</html>

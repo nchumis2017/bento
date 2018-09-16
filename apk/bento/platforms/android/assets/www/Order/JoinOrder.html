@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="../js/jquery-3.2.1.min.js" ></script>
+    <link rel="stylesheet" href="../css/materialize.min.css">
+    <script src="../js/materialize.min.js"></script>
+    <script src="../js/sweetalert.min.js"></script>
+
+    <style media="screen">
+    body{
+      font-family: microsoft jhenghei;
+      font-weight: bold;
+      }
+    </style>
+
+  </head>
+
+  <script>
+
+    </script>
+  <body>
+
+
+
+    <!-- navbar -->
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+      </div>
+    </nav>
+    </div>
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+  <!-- navbar -->
+
+
+
+
+
+
+
+
+
+    <div class="" id="form1">
+    <form class="" action="javascript:NameOK()" >
+      <div class="container">
+        <div class="row">
+
+
+    <div class="input-field col s3">
+        單號 <input type="text" id="OrderId" value="" placeholder="OrderXX" disabled>
+    </div>
+
+    <div class="input-field col s6">
+      名字 <input type="text" id="OrderName" value="" placeholder="請先輸入名字">
+    </div>
+
+    <div class="input-field col s2">
+      <font color="white">.</font><input type="submit" name="" value="確認" class="btn" style="padding-left:14px; padding-right:14px;">
+    </div>
+
+  </div>
+
+
+      <div id="div_products">
+        <hr>
+      </div>
+</div>
+    </form>
+
+  </div>
+
+<script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+    authDomain: "nchumis2017-5566.firebaseapp.com",
+    databaseURL: "https://nchumis2017-5566.firebaseio.com",
+    projectId: "nchumis2017-5566",
+    storageBucket: "nchumis2017-5566.appspot.com",
+    messagingSenderId: "501160127423"
+  };
+  firebase.initializeApp(config);
+
+
+  /////////////////初始化////////////////////
+
+  var database = firebase.database();
+
+//////////////init products/////////////////////
+  var numBento;
+
+
+
+function NameOK(){
+
+var getName = document.getElementById("OrderName").value;
+
+if(getName !== ""){
+
+  database.ref("Products/Bento/Data/").once("value", function(snapshot) {
+    numBento = snapshot.numChildren();
+    for(var i = 1 ;i<=numBento ; i++){
+    var a = snapshot.child("Bento"+i+"/ProductName/").val();
+    var b = snapshot.child("Bento"+i+"/ProductIntro/").val();
+    var c = snapshot.child("Bento"+i+"/ProductPrice/").val();
+    var div_products = document.getElementById("div_products");
+
+    div_products.innerHTML+="<div class='card'><div class='card-content'>品名:<span id='name"+i+"'>"+a+"</span><br>價格:<span id='price"+i+"'>"+c+" </span><br>數量<span id = 'number"+i+"'>0</span><br>小計:<span id='total"+i+"'>0</span><br><div id='people_in"+i+"'><button type='button' class='btn' onclick='javascript:add_number("+i+")' >+</button> <button type='button'  class='btn' onclick='javascript:del_number("+i+")' >-</button></div></div></div>";
+  }
+});
+
+}
+
+else{
+  swal("請輸入名字");
+}
+
+
+}
+
+function add_number(i){
+
+
+  var name_i = document.getElementById("name"+i).innerHTML;
+  var price_i = document.getElementById("price"+i).innerHTML;
+  var number_i = document.getElementById("number"+i);
+
+
+  ++number_i.innerHTML;
+  document.getElementById("total"+i).innerHTML=price_i*number_i.innerHTML;
+  var total_i = document.getElementById("total"+i).innerHTML;
+  var number_inner = number_i.innerHTML;
+
+  ///////count price//////
+
+  var OrderId = document.getElementById("OrderId").value;
+  var OrderName = document.getElementById("OrderName").value;
+
+
+  var dd = database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/");
+  dd.once("value").then(function(snapshot){
+    if(!snapshot.child("name").exists()){
+      dd.set({
+        name: name_i
+      });
+    }
+    database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/"+OrderName+"/").set({
+      bento_i : i,
+      number : number_inner,
+      price : price_i,
+      total : total_i,
+      name : name_i,
+      isPaid : 0
+
+    });
+  });
+
+
+
+}
+
+
+function del_number(i){
+  var name_i = document.getElementById("name"+i).innerHTML;
+  var price_i = document.getElementById("price"+i).innerHTML;
+  var number_i = document.getElementById("number"+i);
+
+  if(number_i.innerHTML!=0){
+
+    --number_i.innerHTML;
+    document.getElementById("total"+i).innerHTML=price_i*number_i.innerHTML;
+    var total_i = document.getElementById("total"+i).innerHTML;
+    var number_inner = number_i.innerHTML;
+
+    ///////count price//////
+
+    var OrderId = document.getElementById("OrderId").value;
+    var OrderName = document.getElementById("OrderName").value;
+
+    var dd = database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/");
+    dd.once("value").then(function(snapshot){
+      if(!snapshot.child("name").exists()){
+        dd.set({
+          name: name_i
+        });
+      }
+      database.ref("Orders/"+OrderId+"/OrderDetail/"+"Bento"+i+"/"+"OrderPeople/"+OrderName+"/").set({
+        bento_i : i,
+        number : number_inner,
+        price : price_i,
+        total : total_i,
+        name : name_i,
+        isPaid : 0
+
+      });
+    });
+
+}
+
+}
+/////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+
+
+</script>
+  </body>
+  <script type="text/javascript">
+  //////////getURL///
+  function getURL() {
+      var url = location.href;
+      var decode = decodeURIComponent(url);
+      var temp = decode.split("?");
+      var vars = temp[1].split("&");
+      console.log(vars[0]);
+      document.getElementById("OrderId").value=vars[0];
+
+   }
+   getURL();
+  //////////////////
+
+  </script>
+</html>

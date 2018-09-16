@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+      <link rel="stylesheet" href="css/materialize.css">
+      <link rel="stylesheet" href="css/main.css">
+      <script  type="text/javascript"  src="firebase.js"></script>
+      <script  type="text/javascript"  src="jquery-3.3.1.js"></script>
+      <script  type="text/javascript"  src="jquery.tinyMap.js"></script>
+      <script  type="text/javascript"  src="materialize.js"></script>
+  </head>
+  <style type="text/css">
+  .map {
+    overflow:hidden;
+    padding-bottom:50%;
+    position:relative;
+    height:0;
+  }
+  .tabs .tab a {
+    color: rgba(79, 235, 39, 0.7);
+  }
+  .tabs .tab a:focus, .tabs .tab a:focus.active {
+    background-color: rgba(79, 235, 39, 0.1);
+  }
+  .tabs .tab a:hover, .tabs .tab a.active {
+    color: rgba(79, 235, 39, 1);
+  }
+  .tabs .indicator {
+    background-color: rgba(79, 235, 39, 0.51);
+  }
+  #mapborder {
+    margin: 15px 0;
+    border-width:1px;
+    border-style:dashed;
+    border-color:rgba(38, 117, 7, 0.37);
+    border-radius:5px;
+    -moz-border-radius:5px;
+    -webkit-border-radius:5px;
+  }
+  hr.styletomap {
+    height: 10px;
+    border: 0;
+    box-shadow: 0 10px 10px -10px #8c8b8b inset;
+  }
+  a {
+    color: rgba(106, 209, 36, 1);
+  }
+  </style>
+<body>
+
+  <div id="navbar">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <nav>
+    <div class="nav-wrapper green darken-1">
+      <ul id="slide-out" class="sidenav green lighten-2">
+          <li><div class="user-view">
+        <div class="background">
+          <img  class="backimg" src="img/delivery.jpg">
+        </div>
+        <a href="#name"><span class="white-text name" id="did">老闆介面</span></a>
+              </div></li>
+        <li><a href="index.html">登出</a></li>
+        <li><a class="waves-effect" href="../mainpage.html">回到首頁</a></li>
+      </ul>
+      <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+      <a href="../mainpage.html" class="brand-logo center">BENTO</a>
+    </div>
+  </nav>
+  </div>
+
+    <br>
+    <div class="row">
+      <div class="col s12">
+        <ul class="tabs tabs-fixed-width z-depth-3">
+          <li class="tab col s3"><a href="add.html" style="font-size:4vw;" >新增外送人員</a></li>
+          <li class="tab col s3"><a href="delPeople/index.html" style="font-size:4vw;" >編輯外送人員</a></li>
+        </ul>
+      </div>
+    </div>
+
+  <div class="map" id="mapborder"></div>
+  <hr class="styletomap">
+
+
+  <ul class="collapsible" id="collapsible1">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+      <div class="collapsible-body"><span>Lorem ipsum dolor sit amet.</span></div>
+    </li>
+  </ul>
+
+      <script  type="text/javascript"  src="initialize.js"></script>
+      <script  type="text/javascript"  src="Boss.js"></script>
+  </body>
+</html>

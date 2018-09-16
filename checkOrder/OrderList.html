@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+      <script src="../js/jquery-3.2.1.min.js" ></script>
+      <link rel="stylesheet" href="../css/materialize.min.css">
+      <script src="../js/materialize.min.js"></script>
+
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+
+    <link rel="stylesheet" href="../css/main.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzUkUrvdaygSJamPdIUkADw4qTuosDjkw" async defer></script>
+<style media="screen">
+
+h5{
+  font-weight: bold;
+}
+td{
+  text-align: center;
+}
+
+</style>
+
+    <title>查看訂單</title>
+  </head>
+
+
+  <body>
+
+
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>個人資訊</a></li>
+          <li><a href='#'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li class="#00838f cyan darken-4" ><a href='#' style="color:white;">WELCOME</a></li>
+          <li><a href='../sideNav/personInfo.html'>個人資訊</a></li>
+          <li><a href='../sideNav/address.html'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+
+
+
+<div class="" id="div_order_content">
+
+
+<br>
+<h5>我的訂單</h5>
+<br>
+
+<!-- if no order -->
+<div class="container" id="ifNoOrder">
+  <br>
+  <br>
+  <div class="card" style="padding-top:10px; padding-bottom:10px;">
+    <h5><p id="p_info">目前沒有訂單</p></h5>
+  </div>
+</div>
+<!-- if no order -->
+
+
+<div class="container" id="OrderList_div">
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+<!-- Modal Structure -->
+<div id="modal1" class="modal">
+  <div class="modal-content">
+    <h4>XX便當店</h4>
+    <hr>
+    <table class="highlight">
+      <tr>
+        <td>電話</td><td>04-22882288</td>
+      </tr>
+      <tr>
+        <td>地址</td><td>台中市南區興大路140號</td>
+      </tr>
+    </table>
+
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">OK</a>
+  </div>
+</div>
+<!-- . -->
+
+  </body>
+
+
+
+
+<script type="text/javascript">
+
+var OrderListNumber = localStorage.getItem("OrderListNumber");
+
+if(OrderListNumber>0){
+  $(document).ready(function(){
+    $('#ifNoOrder').hide();
+  });
+
+  for(var i = 1 ; i <= OrderListNumber ; i++){
+
+    var OrderList_div = document.getElementById("OrderList_div");
+    var OrderId = localStorage.getItem("OrderId"+i);
+    var OrderListShop = localStorage.getItem("OrderListShop"+i);
+    OrderList_div.innerHTML += "<a href='./checkOrder.html?"+OrderId+"&"+OrderListShop+"'><div class='card'><table><tr><td>"+i+"</td><td>"+OrderId+"</td><td>"+OrderListShop+"</td></tr></table></div></div></a>"
+  }
+}
+
+
+
+
+
+</script>
+
+
+
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+	<title>Table V02</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+	<link rel="stylesheet" type="text/css" href="../bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="vendor/perfect-scrollbar/perfect-scrollbar.css">
+	<link rel="stylesheet" type="text/css" href="css/util.css">
+	<link rel="stylesheet" type="text/css" href="css/main.css">
+	 <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+</head>
+<body>
+
+	<div class="limiter">
+		<div class="container-table100">
+			<div class="wrap-table100">
+					<div id="myTable" class="table">
+
+						<div class="row header">
+							<div class="cell">
+								ID
+							</div>
+							<div class="cell">
+								Name
+							</div>
+							<div class="cell">
+								Phone
+							</div>
+							</div>
+						</div>
+						</div>
+					</div>
+			</div>
+
+	<script type="text/javascript">
+			var config = {
+				apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+				authDomain: "nchumis2017-5566.firebaseapp.com",
+				databaseURL: "https://nchumis2017-5566.firebaseio.com",
+				projectId: "nchumis2017-5566",
+				storageBucket: "nchumis2017-5566.appspot.com",
+				messagingSenderId: "501160127423"
+			};
+			firebase.initializeApp(config);
+			var database = firebase.database();
+
+			function addEven(){
+				document.querySelectorAll('#myTable #srow').forEach(e => e.addEventListener("click", function() {
+					var temp = $(this).attr("value");
+					if(confirm("確定刪除嗎？")){
+						var adaRef = firebase.database().ref('Deliverys/'+temp);
+						adaRef.remove().then(function() {
+    						console.log("Remove succeeded.")
+  						}).catch(function(error) {
+    						console.log("Remove failed: " + error.message)
+  						});
+							$(this).remove();
+						}else{
+						}
+				console.log("clicked")
+				}));
+			}
+
+			function getPeople(){
+				var query = firebase.database().ref("Deliverys").orderByKey();
+				query.once("value").then(function(snapshot) {
+					snapshot.forEach(function(childSnapshot) {
+						var ref = firebase.database().ref("Deliverys/"+childSnapshot.key);
+						ref.orderByKey().once("value").then(function(snapshot) {
+						$('#myTable').append('<div id="srow" class="row" value='+snapshot.key+'><div class="cell" data-title="ID">'+snapshot.key+'</div><div class="cell" data-title="Name">'+snapshot.child("name").val()+'</div><div class="cell" data-title="Phoen">'+snapshot.child("phone").val()+'</div>');
+								});
+						});
+					});
+				}
+				getPeople();
+				window.setTimeout("addEven();",3000 );
+	</script>
+
+
+
+
+	<script src="../jquery-3.3.1.js"></script>
+	<script src="../popper.js"></script>
+	<script src="../bootstrap.min.js"></script>
+	<script src="vendor/select2/select2.min.js"></script>
+	<script src="js/main.js"></script>
+
+</body>
+</html>

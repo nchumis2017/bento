@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title></title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+</head>
+<body>
+    <script>
+    var config = {
+      apiKey: "AIzaSyDHJvCW6LwYl0fih2PynaWmX3fYGqmel00",
+      authDomain: "all-store-a0408.firebaseapp.com",
+      databaseURL: "https://all-store-a0408.firebaseio.com",
+      projectId: "all-store-a0408",
+      storageBucket: "",
+      messagingSenderId: "982261178985"
+    };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+        let productCategoryRef, dataRef, counterRef;
+        let path, count;
+        let rootRef = database.ref("Products/");
+        let category;
+        // init databse structure
+        (function () {
+            database.ref("Products/").once('value', function (snapshot) {
+                if (snapshot.val() == null) {
+                    database.ref("Products/").set({
+                        Bento: {
+                            Counter: 0,
+                            Data: {}
+                        },
+                        Soup: {
+                            Counter: 0,
+                            Data: {}
+                        },
+                        Dessert: {
+                            Counter: 0,
+                            Data: {}
+                        },
+                        Others: {
+                            Counter: 0,
+                            Data: {}
+                        }
+                    });
+                }
+            });
+        })();
+    </script>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">&nbspMenu</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <br>
+    <div class="container" id="app">
+        <button type="button" class="cate btn btn-outline-primary">Bento</button>
+        <button type="button" class="cate btn btn-outline-success">Soup</button>
+        <button type="button" class="cate btn btn-outline-danger">Dessert</button>
+        <button type="button" class="cate btn btn-outline-warning">Others</button>
+        <button type="button" class="btn btn-outline-info" id="list">查看目前菜單</button>
+        <div id="inputFiled"></div>
+        <div id="listProducts"></div>
+    </div>
+    <script>
+        $('#list').on("click", function () {
+            $('#inputFiled').hide();
+            rootRef.on('value', function (snapshot) {
+                $('#listProducts').empty();
+
+                $.each(snapshot.val(), function (key, value) {
+                    var str = "";
+                    str += '<h4>' + key + '</h4>'
+                    str += '<ul class="collection" id="menu_list">'
+
+                    snapshot.child(key + '/Data').forEach(function (data) {
+                        var item = data.val();
+                        str += '<li class="collection-item">品名：' + item.ProductName + ' &nbsp售價：' + item.ProductPrice + ' &nbsp簡介：' + item.ProductIntro + ' &nbsp狀態：' + item.ProductStatus + '<i class="material-icons edit" onclick="javascript:edit(\'' + item.ProductID + '\')">create</i><i class="material-icons">delete</i></li>';
+                    });
+                    str += '</ul>';
+                    $('#listProducts').append(str);
+                });
+            });
+
+            $('#listProducts').show();
+        });
+        $('button.cate').on("click", function () {
+            $('#inputFiled').show();
+            $('#listProducts').hide();
+
+            let inputField = "";
+            let title = ["名稱 ", "價格 ", "簡介 "];
+            let buttonType = "";
+            category = $(this).text();
+            path = "Products/" + category;
+            switch (category) {
+                case "Bento":
+                    buttonType = "primary";
+                    break;
+                case "Soup":
+                    buttonType = "success";
+                    break;
+                case "Dessert":
+                    buttonType = "danger";
+                    break;
+                case "Others":
+                    buttonType = "warning";
+                    break;
+            }
+
+            inputField += '<br><h4>新增 ' + category + ' 中...</h4>';
+            for (let i = 0; i < 3; i++)
+            {
+                if (i % 2 == 0 ) {
+                    inputField += '<div class="row">';
+                }
+                inputField += '<div class="input-field col s6">';
+
+                inputField += '<input class="validate" type="text" id="' + category + i + '"><br>';
+                inputField += '<label for="'+ category + i+'">'+ title[i] +'</label></div>';
+                if (i % 2 == 0) {
+                    inputField += '</div>';
+                }
+            }
+            inputField += '商品狀態 ： <input name="ProductStatus" type = "radio" id = "ProductStatusT" value = "true" checked /> <label for="ProductStatusT" >開放訂購</label>';
+            inputField += '<input name="ProductStatus" type="radio" id="ProductStatusF" value="false"/><label for="ProductStatusF" >關閉訂購</label>';
+            inputField += '<br><a class="btn btn-primary btn-lg btn-block" id="submitBtn" href="#" role="button">Submit</a>';
+            $('#inputFiled').html(inputField);
+            productCategoryRef = database.ref(path);
+            counterRef = database.ref(path + "/Counter");
+
+
+            var counter;
+            counterRef.on('value', function (snapshot) {
+                counter = snapshot.val() + 1;
+            });
+
+            function setObject(obj) {
+                dataRef = database.ref(path + "/Data/" + category + counter);
+                obj = {
+                    ProductID: category + counter,
+                    ProductName: $('#' + category + 0).val(),
+                    ProductPrice: $('#' + category + 1).val(),
+                    ProductIntro: $('#' + category + 2).val(),
+                    ProductStatus: $("#ProductStatusT").is(":checked")
+                };
+                dataRef.set(obj);
+                counterRef.set(counter);
+                swal(
+                    '新增成功',
+                    '按下ok吧',
+                    'success'
+                );
+
+            }
+
+            $('#submitBtn').on('click', setObject);
+        });
+    </script>
+</body>
+</html>

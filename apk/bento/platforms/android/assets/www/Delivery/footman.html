@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- material CSS -->
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="../css/main.css">
+    <script  type="text/javascript"  src="firebase.js"></script>
+    <script  type="text/javascript"  src="jquery-3.3.1.js"></script>
+    <script  type="text/javascript"  src="jquery.tinyMap.js"></script>
+    <script  type="text/javascript"  src="materialize.js"></script>
+    <!-- google CSS -->
+    <style type="text/css">
+    .map {
+      overflow:hidden;
+      padding-bottom:50%;
+      position:relative;
+      height:0;
+    }
+    .backimg {
+      background-image:url('img/delivery.jpg');
+      background-repeat:no-repeat;
+      background-size:auto;
+    }
+    .tabs .tab a {
+      color: rgba(79, 235, 39, 0.7);
+    }
+    .tabs .tab a:focus, .tabs .tab a:focus.active {
+      background-color: rgba(79, 235, 39, 0.1);
+    }
+    .tabs .tab a:hover, .tabs .tab a.active {
+      color: rgba(79, 235, 39, 1);
+    }
+    .tabs .indicator {
+      background-color: rgba(79, 235, 39, 0.51);
+    }
+    .modal-trigger {
+      font-weight: 900;
+      color:rgba(0, 0, 0, 1);
+    }
+    </style>
+    <title>外送人員專用</title>
+  </head>
+  <body>
+    <div id="navbar">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <nav>
+      <div class="nav-wrapper green darken-1">
+        <ul id="slide-out" class="sidenav green lighten-2">
+            <li><div class="user-view">
+          <div class="background">
+            <img  class="backimg" src="img/delivery.jpg">
+          </div>
+          <a href="#name"><span class="white-text name" id="did"></span></a>
+          <a href="#email"><span class="white-text email" id="dphone"></span></a>
+                </div></li>
+          <li><a class='modal-trigger' href="#modaladd">新增外送訂單</a></li>
+          <li><a href="index.html">登出</a></li>
+          <li><a class="waves-effect" href="../index.html">回到首頁</a></li>
+        </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <a href="/index.html" class="brand-logo center">BENTO</a>
+      </div>
+    </nav>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col s12">
+        <ul class="tabs tabs-fixed-width z-depth-3">
+          <li class="tab col s3"><a href="#test1" onclick="getAddress()">取得訂單</a></li>
+          <li class="tab col s3"><a href="#test2" onclick="getAllMarkers()">訂單定位</a></li>
+          <li class="tab col s3"><a href="#test3" onclick="getNowPosition()">我的位置</a></li>
+          <li class="tab col s3"><a href="#test4" onclick="drawDirection()">規劃路線</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="map"></div>
+
+    <br>
+    <div class="row">
+      <div class="col s6">
+        現在的位置：<br>
+        <pon id="position_p"></pon>
+      </div>
+      <div class="col s6">
+        自動更新位置：
+        <div class="switch">
+        <label>
+          Off
+        <input type="checkbox" id="autolo">
+        <span class="lever"></span>
+          On
+        </label>
+        </div>
+      </div>
+    </div>
+
+      <div class="row" id="card">
+      </div>
+
+    <div id="modalall">
+      </div>
+
+      <!-- Bottom Sheet Modals -->
+    <div id="modaladd" class="modal bottom-sheet">
+      <div class="modal-content">
+        <h4>Modal Header</h4>
+        <p>A bunch of text</p>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+      </div>
+    </div>
+
+
+    <script  type="text/javascript"  src="initialize.js"></script>
+    <script  type="text/javascript"  src="footman.js"></script>
+  </body>
+</html>

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="zh-TW">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- material CSS -->
+    <link rel="stylesheet" href="css/materialize.css">
+    <link rel="stylesheet" href="css/main.css">
+    <script  type="text/javascript"  src="firebase.js"></script>
+    <script  type="text/javascript"  src="jquery-3.3.1.js"></script>
+    <script  type="text/javascript"  src="jquery.tinyMap.js"></script>
+    <script  type="text/javascript"  src="materialize.js"></script>
+    <!-- google CSS -->
+    <style type="text/css">
+    .map {
+      overflow:hidden;
+      padding-bottom:50%;
+      position:relative;
+      height:0;
+    }
+    .backimg {
+      background-image:url('img/delivery.jpg');
+      background-repeat:no-repeat;
+      background-size:auto;
+    }
+    .tabs .tab a {
+      color: rgba(79, 235, 39, 0.7);
+    }
+    .tabs .tab a:focus, .tabs .tab a:focus.active {
+      background-color: rgba(79, 235, 39, 0.1);
+    }
+    .tabs .tab a:hover, .tabs .tab a.active {
+      color: rgba(79, 235, 39, 1);
+    }
+    .tabs .indicator {
+      background-color: rgba(79, 235, 39, 0.51);
+    }
+    .modal-trigger {
+      font-weight: 900;
+      color:rgba(0, 0, 0, 1);
+    }
+    hr.style6 {
+      height: 10px;
+	    border: 0;
+	    box-shadow: 0 10px 10px -10px #8c8b8b inset;
+    }
+    hr.style4 {
+      border-top: 1px dashed #8c8b8b;
+    }
+    hr.styletomap {
+    	height: 10px;
+    	border: 0;
+    	box-shadow: 0 10px 10px -10px #8c8b8b inset;
+    }
+    #mapborder {
+      margin: 15px 0;
+      border-width:1px;
+      border-style:dashed;
+      border-color:rgba(38, 117, 7, 0.37);
+      border-radius:5px;
+      -moz-border-radius:5px;
+      -webkit-border-radius:5px;
+    }
+    </style>
+    <title>外送人員專用</title>
+  </head>
+  <body>
+    <div id="navbar">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <nav>
+      <div class="nav-wrapper green darken-1">
+        <ul id="slide-out" class="sidenav green lighten-2">
+            <li><div class="user-view">
+          <div class="background">
+            <img  class="backimg" src="img/delivery.jpg">
+          </div>
+          <a href="#name"><span class="white-text name" id="did"></span></a>
+                </div></li>
+          <li><a href="index.html">登出</a></li>
+          <li><a class="waves-effect" href="../mainpage.html">回到首頁</a></li>
+        </ul>
+        <a href="#" data-target="slide-out" class="sidenav-trigger show-on-large"><i class="material-icons">menu</i></a>
+        <a href="../mainpage.html" class="brand-logo center">BENTO</a>
+      </div>
+    </nav>
+    </div>
+    <br>
+    <div class="row">
+      <div class="col s12">
+        <ul class="tabs tabs-fixed-width z-depth-3" >
+          <li class="tab col s3"><a href="#test1" onclick="getAddress()" style="font-size:3vw;">取得訂單</a></li>
+          <li class="tab col s3"><a href="#test2" onclick="getAllMarkers()" style="font-size:3vw;">訂單定位</a></li>
+          <li class="tab col s3"><a href="#test3" onclick="getNowPosition()" style="font-size:3vw;">我的位置</a></li>
+          <li class="tab col s3"><a href="#test4" onclick="drawDirection()" style="font-size:3vw;">規劃路線</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="map" id="mapborder"></div>
+    <hr class="styletomap">
+
+    <div class="row">
+      <div class="col s6">
+        <div  style="font-size:3vw;">現在的位置</div>
+        <pon style="font-size:1.3vw;" id="position_p"></pon>
+      </div>
+      <div class="col s6">
+        <b  style="font-size:3vw;">自動更新位置</b>
+        <div class="switch">
+        <label>
+          Off
+        <input type="checkbox" id="autolo">
+        <span class="lever"></span>
+          On
+        </label>
+        </div>
+      </div>
+    </div>
+
+      <div class="row" id="card">
+      </div>
+
+    <div id="modalall">
+      </div>
+
+
+    <script  type="text/javascript"  src="initialize.js"></script>
+    <script  type="text/javascript"  src="footman.js"></script>
+  </body>
+</html>

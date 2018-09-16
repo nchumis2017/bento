@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAzUkUrvdaygSJamPdIUkADw4qTuosDjkw" async defer></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyDHJvCW6LwYl0fih2PynaWmX3fYGqmel00",
+        authDomain: "all-store-a0408.firebaseapp.com",
+        databaseURL: "https://all-store-a0408.firebaseio.com",
+        projectId: "all-store-a0408",
+        storageBucket: "",
+        messagingSenderId: "982261178985"
+      };
+      firebase.initializeApp(config);
+    </script>
+<style media="screen">
+  html,body{
+    font-family: microsoft jhenghei;
+    font-weight: bold;
+  }
+</style>
+    <title>JOINUS</title>
+  </head>
+  <body>
+
+    <!-- navbar -->
+    <!-- <div id="navbar"></div> -->
+
+    <!-- <script type="text/javascript">
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", "/navbar.html", false);
+    ajax.send();
+    document.getElementById("navbar").innerHTML += ajax.responseText;
+    </script>
+    <script type="text/javascript">$(".button-collapse").sideNav();</script> -->
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+      </div>
+    </nav>
+    </div>
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+
+  <!-- navbar -->
+
+<br>
+
+<div class="container">
+
+<h4 style="text-align:left;">基本資料</h4>
+<hr>
+  <div class="card">
+
+    <div class="container">
+
+<form class="col s12" id="form1" action="javascript:addressTolatlng()" method="post">
+<br>
+
+  <div class="row">
+    <div class="input-field col s12">
+      <input type="text" id="shopName" name= value="">
+      <label for="shopName">商店名稱</label>
+  </div>
+</div>
+
+<div class="row">
+    <div class="input-field col s12">
+      <input type="text" id="firebaseID" name="firebaseID" value="">
+      <label for="firebaseID">Firebase序號</label>
+  </div>
+</div>
+
+<div class="row">
+  <div class="input-field col s12">
+    <input type="text" id="apiKey" name="apiKey" value="">
+    <label for="apiKey">apiKey</label>
+  </div>
+</div>
+
+<div class="row">
+  <div class="input-field col s12">
+    <input type="text" id="briefInfo" name="briefInfo" value="">
+    <label for="briefInfo">briefInfo</label>
+  </div>
+</div>
+
+<div class="row">
+  <div class="input-field col s12">
+    <input type="text" id="tel" name="tel" value="">
+    <label for="tel">TEL</label>
+  </div>
+</div>
+
+<div class="row">
+  <div class="input-field col s12">
+    <input type="text" id="openHours" name="openHours" value="">
+    <label for="openHours">openHours</label>
+  </div>
+</div>
+
+<div class="row">
+  <div class="input-field col s12">
+    <input type="text" id="address" name="address" value="">
+    <label for="address">address</label>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="input-field col s6">
+    <font color="grey">經度</font>
+    <input type="text" id="lat" name="lat" value="">
+  </div>
+  <div class="input-field col s6">
+    <font color="grey">緯度</font>
+    <input type="text" id="lon" name="lon" value="">
+  </div>
+</div>
+
+
+
+<div class="row">
+
+  <input type="submit" class="btn" name="" value="下一步">
+<br>  <br>
+</div>
+</form>
+    </div>
+</div>
+</div>
+  </body>
+
+  <script type="text/javascript">
+
+function last_confirm(){
+  var shopName = document.getElementById("shopName").value;
+  var firebaseID = document.getElementById("firebaseID").value;
+  var apiKey = document.getElementById("apiKey").value;
+  var address = document.getElementById("address").value;
+  var briefInfo = document.getElementById("briefInfo").value;
+  var tel = document.getElementById("tel").value;
+  var openHours = document.getElementById("openHours").value;
+
+  swal({
+  html: true,
+  title: "Are you sure?",
+  text: "店家名稱:"+shopName+"\nFirebaseID:"+firebaseID+"\nAPIkey:"+apiKey+"\n地址:"+address+"\n簡介:"+briefInfo+"\n電話:"+tel+"\n營業時間:"+openHours,
+  buttons: true,
+  dangerMode: false,
+})
+.then((willDelete) => {
+  if (willDelete) {
+
+    swal("成功","success").then((value)=>{
+      addshop();                 ////////////////////按下OK就寫入FIREBASE
+    });
+
+
+  }
+
+  else {
+  }
+});
+
+}
+
+//////////////////////////////////////////////
+function addressTolatlng(){
+  var x=document.getElementById("address").value;
+
+      var geocoder = new google.maps.Geocoder();
+      geocoder.geocode({
+          "address": x
+      }, function (results, status) {
+
+          if (status == google.maps.GeocoderStatus.OK) {
+              document.getElementById("lat").value = results[0].geometry.location.lat();
+              document.getElementById("lon").value = results[0].geometry.location.lng();
+            console.log(results[0].geometry.location.lat()+","+geometry.location.lng());
+          }
+
+      });
+
+last_confirm();
+}
+
+
+  var database = firebase.database();
+
+function addshop(){
+
+
+
+
+
+  var shopName = document.getElementById("shopName").value;
+  var firebaseID = document.getElementById("firebaseID").value;
+  var apiKey = document.getElementById("apiKey").value;
+  var address = document.getElementById("address").value;
+  var briefInfo = document.getElementById("briefInfo").value;
+  var tel = document.getElementById("tel").value;
+  var openHours = document.getElementById("openHours").value;
+  var lat = document.getElementById("lat").value;
+  var lon = document.getElementById("lon").value;
+
+  // var lat = document.getElementById("lat").value;
+  // var lon = document.getElementById("lon").value;
+
+  database.ref("stores").once("value").then(function(snapshot){
+    var counter = snapshot.child("counter").val();
+    counter++;
+    database.ref("stores/"+"shop"+counter+"/shopName").set(shopName);
+    database.ref("stores/"+"shop"+counter+"/shopInfo/address").set(address);
+    database.ref("stores/"+"shop"+counter+"/shopInfo/briefInfo").set(briefInfo);
+    database.ref("stores/"+"shop"+counter+"/shopInfo/tel").set(tel);
+    database.ref("stores/"+"shop"+counter+"/shopInfo/openHours").set(openHours);
+    database.ref("stores/"+"shop"+counter+"/shopInfo/location").set({
+      lat:lat,
+      lon:lon
+    });
+
+    database.ref("stores/"+"shop"+counter+"/firebase_auth/").set({
+      firebaseID:firebaseID,
+      apiKey:apiKey
+    })
+    database.ref("stores/counter").set(counter);
+  });
+
+document.getElementById("form1").reset();
+}
+  </script>
+
+
+</html>

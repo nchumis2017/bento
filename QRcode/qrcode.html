@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="../js/jquery-3.2.1.min.js" ></script>
+    <link rel="stylesheet" href="../css/materialize.min.css">
+    <script src="../js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+
+    <link rel="stylesheet" href="/css/main.css">
+
+    <script src="./qrcodeJs/jquery.qrcode.js"></script>
+    <script src="./qrcodeJs/qrcode.js"></script>
+
+
+    <title>QRcode</title>
+<style media="screen">
+  body{
+    text-align: center;
+  }
+  h5{
+    font-weight: bold;
+  }
+  h2{
+    margin-top: 0px;
+  }
+
+</style>
+
+  </head>
+  <body>
+
+
+    <!-- navbar -->
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>個人資訊</a></li>
+          <li><a href='#'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li class="#00838f cyan darken-4" ><a href='#' style="color:white;">WELCOME</a></li>
+          <li><a href='../sideNav/personInfo.html'>個人資訊</a></li>
+          <li><a href='../sideNav/address.html'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+      </div>
+    </nav>
+    </div>
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+  <!-- navbar -->
+
+
+
+<br>
+
+  <div class="container" style="text-align:center;">
+    <div class="card">
+        <div id="responsive-img">
+        <div id="qrcode"></div>
+        </div>
+      </div>
+    </div>
+        <!-- <button type="button" name="button" class="btn" onclick="newQRcode()">Random</button> -->
+<h4>訂單編號</h4>
+<br>
+    <h2><a id="QRString" ></a></h2>
+    <div class="preloader-wrapper big active" id="progress_circle">
+      <div class="spinner-layer spinner-blue-only">
+        <div class="circle-clipper left">
+          <div class="circle"></div>
+        </div>
+        <div class="gap-patch">
+          <div class="circle"></div>
+        </div>
+        <div class="circle-clipper right">
+          <div class="circle"></div>
+        </div>
+      </div>
+    </div>
+<h4>正在產生訂單中...</h4>
+<br>
+
+    <script type="text/javascript">
+
+
+
+    var config = {
+      apiKey: "AIzaSyDHJvCW6LwYl0fih2PynaWmX3fYGqmel00",
+      authDomain: "all-store-a0408.firebaseapp.com",
+      databaseURL: "https://all-store-a0408.firebaseio.com",
+      projectId: "all-store-a0408",
+      storageBucket: "",
+      messagingSenderId: "982261178985"
+    };
+    firebase.initializeApp(config);
+
+    var database = firebase.database();
+
+
+
+newQRcode();
+
+
+function randomString(length, chars) {
+    var mask = '';
+      if (chars.indexOf('a') > -1) mask += 'abcdefghijklmnopqrstuvwxyz';
+      if (chars.indexOf('A') > -1) mask += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      if (chars.indexOf('#') > -1) mask += '0123456789';
+      if (chars.indexOf('!') > -1) mask += '~`!@#$%^&*()_+-={}[]:";\'<>?,./|\\';
+      var result = '';
+      for (var i = length; i > 0; --i) result += mask[Math.floor(Math.random() * mask.length)];
+      return result;
+    }
+
+
+function newQRcode(){
+  var url = location.href;
+  var decode = decodeURIComponent(url);
+  var temp = decode.split("?");
+  var vars = temp[1].split("&");
+
+    document.getElementById("qrcode").innerHTML="";
+    var randomQRcode = randomString(2,'A')+randomString(4,'#');
+
+  database.ref("stores").once("value").then(function(snapshot){
+
+    var shop_i_name = snapshot.child(vars[0]+"/shopName").val();
+  
+    /////////////////undone////////////////////
+    /////////////////undone////////////////////
+    var firebase_config;
+    /////////////////undone////////////////////
+    /////////////////undone////////////////////
+
+
+    // jQuery('#qrcode').qrcode({width:"300" ,height:"300" ,text: randomQRcode+"&"+shop_i_name});
+
+    document.getElementById("QRString").innerHTML = randomQRcode;
+    document.getElementById("progress_circle").innerHTML = "";
+    document.getElementById("QRString").href='../Order/MainOrder.html?'+randomQRcode+"&"+shop_i_name;
+    location.href = '../Order/MainOrder.html?'+randomQRcode+"&"+shop_i_name;
+    console.log(shop_i_name);
+  });
+}
+
+</script>
+
+
+  </body>
+</html>

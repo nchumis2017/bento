@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>餐廳桌管理</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <script>
+        $(document).ready(function () {
+
+            $('select').material_select();
+            $('.modal').modal();
+        });
+    </script>
+    <style>
+        :root {
+            --token-width: 100px;
+            --token-height: 100px;
+
+        }
+
+        body {
+            background-color: #ffcc80
+        }
+
+        .token {
+            width: var(--token-width);
+            height: var(--token-height);
+            background-color: #bbdefb;
+            border-radius: 100%;
+            text-align: center;
+            box-shadow: 0 0 30px #424242;
+        }
+
+        .token span {
+            line-height: var(--token-height);
+            font-size: 50px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+            authDomain: "nchumis2017-5566.firebaseapp.com",
+            databaseURL: "https://nchumis2017-5566.firebaseio.com",
+            projectId: "nchumis2017-5566",
+            storageBucket: "nchumis2017-5566.appspot.com",
+            messagingSenderId: "501160127423"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+    </script>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Logo</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <script>
+        var rootRef = database.ref("/");
+
+        rootRef.on("value", function (snapshot) {
+            $('#table').empty();
+            
+
+            var isExists = snapshot.child("Table").exists();
+            if (!isExists) {
+                swal({
+                    type: 'error',
+                    title: '無店家資料',
+                    text: '請先初始化您的桌資料',
+
+                })
+                $('button.swal2-confirm').on('click', function () {
+                    $('#tableForm').css('display', 'block');
+                });
+
+            }
+            else {
+                
+                $('#tableForm').remove();
+                var obj = snapshot.child("Table").val();
+                var str = '';
+                $.each(obj, function (key, value) {
+                    switch (key) {
+                        case '1P':
+                            var tmp = '<div id="1P"><h3>1人座</h3><div class="row">';
+                            $.each(value, function (k, v) {
+                                if (k == 'counter')
+                                    return;
+                                if (k == 'available')
+                                    return;
+                                tmp += '<div class="col s12 m3 l3" onclick="javascript:edit(\'' + key + '/' + v.tableNum + '\')">';
+                                if (v.tableStatus == 'free')
+                                    tmp += '<div class="card green accent-3">';
+                                else if (v.tableStatus == 'busy')
+                                    tmp += '<div class="card red accent-3">';
+                                else if (v.tableStatus == 'disabled')
+                                    tmp += '<div class="card grey darken-3">';
+                                tmp += '<div class="card-content white-text">';
+                                tmp += '<span class="card-title">' + v.tableNum + '號桌</span>';
+                                tmp += '</div></div></div>';
+
+                            });
+                            tmp += '</div></div>';
+                            $('#table').append(tmp);
+                            break;
+                        case '2P':
+                            var tmp = '<div id="2P"><h3>2人座</h3><div class="row">';
+                            $.each(value, function (k, v) {
+                                if (k == 'counter')
+                                    return;
+                                if (k == 'available')
+                                    return;
+                                tmp += '<div class="col s12 m3 l3" onclick="javascript:edit(\'' + key + '/' + v.tableNum + '\')">';
+                                if (v.tableStatus == 'free')
+                                    tmp += '<div class="card green accent-3">';
+                                else if (v.tableStatus == 'busy')
+                                    tmp += '<div class="card red accent-3">';
+                                else if (v.tableStatus == 'disabled')
+                                    tmp += '<div class="card grey darken-3">';
+                                tmp += '<div class="card-content white-text">';
+                                tmp += '<span class="card-title">' + v.tableNum + '號桌</span>';
+                                tmp += '</div></div></div>';
+
+                            });
+                            tmp += '</div></div>';
+                            $('#table').append(tmp);
+                            break;
+                        case '4P':
+                            var tmp = '<div id="4P"><h3>4人座</h3><div class="row">';
+                            $.each(value, function (k, v) {
+                                if (k == 'counter')
+                                    return;
+                                if (k == 'available')
+                                    return;
+                                tmp += '<div class="col s12 m3 l3" onclick="javascript:edit(\'' + key + '/' + v.tableNum + '\')">';
+                                if (v.tableStatus == 'free')
+                                    tmp += '<div class="card green accent-3">';
+                                else if (v.tableStatus == 'busy')
+                                    tmp += '<div class="card red accent-3">';
+                                else if (v.tableStatus == 'disabled')
+                                    tmp += '<div class="card grey darken-3">';
+                                tmp += '<div class="card-content white-text">';
+                                tmp += '<span class="card-title">' + v.tableNum + '號桌</span>';
+                                tmp += '</div></div></div>';
+
+                            });
+                            tmp += '</div></div>';
+                            $('#table').append(tmp);
+                            break;
+                        case '5P':
+                            var tmp = '<div id="5P"><h3>5人座以上</h3><div class="row">';
+                            $.each(value, function (k, v) {
+                                if (k == 'counter')
+                                    return;
+                                if (k == 'available')
+                                    return;
+                                tmp += '<div class="col s12 m3 l3" onclick="javascript:edit(\'' + key + '/' + v.tableNum + '\')">';
+                                if (v.tableStatus == 'free')
+                                    tmp += '<div class="card green accent-3">';
+                                else if (v.tableStatus == 'busy')
+                                    tmp += '<div class="card red accent-3">';
+                                else if (v.tableStatus == 'disabled')
+                                    tmp += '<div class="card grey darken-3">';
+                                tmp += '<div class="card-content white-text">';
+                                tmp += '<span class="card-title">' + v.tableNum + '號桌</span>';
+                                tmp += '</div></div></div>';
+
+                            });
+                            tmp += '</div></div>';
+                            $('#table').append(tmp);
+                            break;
+                    }
+
+
+                });
+
+
+            }
+            check_available_token(5);
+
+
+        });
+
+
+
+        queueRef = database.ref("/Queue");
+        queueRef.on("value", function (snapshot) {
+            $('#queue').empty();
+            var obj = snapshot.val();
+            var str = "";
+            $.each(obj, function (key, value) {
+                if (key == 'counter')
+                    return;
+                if (key == 'call')
+                    return;
+                str += '<h3>' + key + '</h3>';
+                str += '<div class="row" id="' + key + '_queue">'
+                // console.log(Object.keys(value));
+                var count = 0;
+                $.each(value, function (k, v) {
+                    count++;
+                    str += '<div class="token" id="' + key + "_" + count + '" style="float:left" onclick="javascript:token_info(\'' + key + '/' + k + '\')"><span>' + k + '</span></div>';
+                    // console.log(k +"XXXX"+ JSON.stringify(v));
+                });
+                str += '</div>';
+            });
+            $('#queue').append(str);
+        });
+
+        // 從桌型
+        function check_available_token(arg) {
+            var rootRef = database.ref("/");
+            if (arg == 3) {
+
+                arg--;
+                check_available_token(arg);
+            }
+            else if (arg > 0){
+                rootRef.once('value', function (snapshot) {
+                    var obj = snapshot.child("Table").val();
+                    // if (1 == 1)
+                    // {
+                    //     for (var k = 1; k <= 5; k++)
+                    //     {
+
+                    //         for (var i = 0; i < $('#' + k + 'P_queue').children().length; i++) {
+                    //             $('#' + k + 'P_' + Number(i + 1)).removeClass('animated bounce infinite');
+                    //             $('#' + k + 'P_' + Number(i + 1)).css("background-color", "#bbdefb");
+                    //         }
+                    //     }
+                    // }
+                    if (obj[arg+'P'].available !== 0){                       // arg 有空閒桌
+                        if ($('#'+arg+'P_queue').children().length !== 0)    //該桌型有人再等，優先排
+                        {
+                            var available_call;
+                            if (obj[arg + 'P'].available > $('#' + arg + 'P_queue').children().length)
+                                available_call = $('#' + arg + 'P_queue').children().length;
+                            else 
+                                available_call = obj[arg + 'P'].available;
+                            for (var i = 0; i < $('#' + arg + 'P_queue').children().length; i++) {
+                                $('#'+arg+'P_'+ Number(i + 1)).removeClass('animated bounce infinite');
+                                $('#'+arg+'P_'+ Number(i + 1)).css("background-color", "#bbdefb");
+                            }
+                            for (var i = 0; i < $('#3P_queue').children().length; i++) {
+                                $('#3P_' + Number(i + 1)).removeClass('animated bounce infinite');
+                                $('#3P_' + Number(i + 1)).css("background-color", "#bbdefb");
+                             
+                            }
+                            
+
+                            for (var i = 0; i < available_call; i++) {
+                                // console.log('#1P_' + Number(i + 1));
+                                $('#'+arg+'P_' + Number(i + 1)).css("background-color", "#69f0ae");
+                                $('#'+arg+'P_' + Number(i + 1)).addClass('animated bounce infinite');
+                            }
+
+                        }
+                        if (obj[arg + 'P'].available - $('#' + arg + 'P_queue').children().length > 0){
+                            // if (arg - 1 <= 0){}
+
+                            for (var token_type = arg - 1; token_type > 0; token_type--)
+                            {
+                                var available_call_token = Math.floor(arg / token_type);
+                                // console.log("arg="+arg+"tokenType="+token_type+"available_call_token"+available_call_token);
+                                for (var j = 0; j < available_call_token; j++)
+                                {
+                                    // console.log("j"+j +"XXXXXXXXXX"+ '#' + token_type + 'P_' + Number(j + 1));
+                                    $('#' + token_type + 'P_' + Number(j + 1)).css("background-color", "#69f0ae");
+                                    $('#' + token_type + 'P_' + Number(j + 1)).addClass('animated bounce infinite');
+                                } 
+                                
+                            }
+
+                        }
+                    }
+                    // console.log(obj[arg + 1 + 'P'].available - $('#' + arg + 1 + 'P_queue').children().length);
+                    
+                
+
+                });
+                arg--;
+                check_available_token(arg);
+            }
+
+            else 
+                return;
+
+
+        }
+
+
+    </script>
+    <div class="row"></div>
+    <div class="row">
+        <div id="table" style="width:60%;float:left"></div>
+        <div id="queue" style="width:40%; float:right"></div>
+    </div>
+    <div id="tableForm" style="display:none">
+        <div class="row">
+
+            <div class="row">
+                <div class="col s12 m3">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">1人</span>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <select multiple id="table_1p">
+                                        <option value="" disabled selected>請選擇桌號</option>
+                                        <option value="1">1號</option>
+                                        <option value="2">2號</option>
+                                        <option value="3">3號</option>
+                                        <option value="4">4號</option>
+                                        <option value="5">5號</option>
+                                        <option value="6">6號</option>
+                                        <option value="7">7號</option>
+                                        <option value="8">8號</option>
+                                        <option value="9">9號</option>
+                                    </select>
+                                    <label>請選擇桌號</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col s12 m3">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">2人</span>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <select multiple id="table_2p">
+                                        <option value="" disabled selected>請選擇桌號</option>
+                                        <option value="1">1號</option>
+                                        <option value="2">2號</option>
+                                        <option value="3">3號</option>
+                                        <option value="4">4號</option>
+                                        <option value="5">5號</option>
+                                        <option value="6">6號</option>
+                                        <option value="7">7號</option>
+                                        <option value="8">8號</option>
+                                        <option value="9">9號</option>
+                                    </select>
+                                    <label>請選擇桌號</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col s12 m3">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">4人</span>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <select multiple id="table_4p">
+                                        <option value="" disabled selected>請選擇桌號</option>
+                                        <option value="1">1號</option>
+                                        <option value="2">2號</option>
+                                        <option value="3">3號</option>
+                                        <option value="4">4號</option>
+                                        <option value="5">5號</option>
+                                        <option value="6">6號</option>
+                                        <option value="7">7號</option>
+                                        <option value="8">8號</option>
+                                        <option value="9">9號</option>
+                                    </select>
+                                    <label>請選擇桌號</label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col s12 m3">
+                    <div class="card blue-grey darken-1">
+                        <div class="card-content white-text">
+                            <span class="card-title">5人以上</span>
+                            <div class="row">
+                                <div class="input-field col s12">
+                                    <select multiple id="table_5p">
+                                        <option value="" disabled selected>請選擇桌號</option>
+                                        <option value="1">1號</option>
+                                        <option value="2">2號</option>
+                                        <option value="3">3號</option>
+                                        <option value="4">4號</option>
+                                        <option value="5">5號</option>
+                                        <option value="6">6號</option>
+                                        <option value="7">7號</option>
+                                        <option value="8">8號</option>
+                                        <option value="9">9號</option>
+                                    </select>
+                                    <label>請選擇桌號</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <img src="./success.svg" width="30%" height="30%" style="margin-left:35%" onclick="javascript:init_table()">
+    </div>
+
+    <div id="modal1" class="modal">
+        <div id="modal1-content" class="modal-content">
+
+        </div>
+        <div class="modal-footer">
+            <a href="#!" id="edit_submit" class="modal-action modal-close waves-effect waves-green btn">更新</a>
+        </div>
+    </div>
+    <div id="modal2" class="modal">
+        <div id="modal2-content" class="modal-content">
+
+        </div>
+        <div class="modal-footer">
+            <!-- <a href="#!" id="edit_submit" class="modal-action modal-close waves-effect waves-green btn">更新</a> -->
+        </div>
+    </div>
+    <script>
+        var origin_table_status = 'free';
+        function edit(tableName) {
+            var tableRef = database.ref("Table/" + tableName);
+            var edit_str = "";
+            tableRef.once('value', function (snapshot) {
+                $('#modal1-content').empty();
+                var obj = snapshot.val();
+                origin_table_status = obj.tableStatus;
+                edit_str += '<h4>桌號：' + obj.tableNum + '號桌</h4>';
+                edit_str += '<input value="' + obj.tableNum + '" id="tableNum" type="text" style="display:none" class="validate">';
+                edit_str += '<input value="' + tableName + '" id="tableRef" type="text" style="display:none" class="validate">';
+                if (obj.tableStatus == 'free') {
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusFree" value="free" checked /><label for="TableStatusFree" >空閒</label>';
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusBusy" value="busy" /><label for="TableStatusBusy" >使用中</label>';
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusDisabled" value="disabled" /><label for="TableStatusDisabled" >停用</label>';
+
+                }
+                else if (obj.tableStatus == 'busy') {
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusFree" value="free"  /><label for="TableStatusFree" >空閒</label>';
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusBusy" value="busy" checked/><label for="TableStatusBusy" >使用中</label>';
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusDisabled" value="disabled" /><label for="TableStatusDisabled" >停用</label>';
+
+                }
+
+                else {
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusFree" value="free"  /><label for="TableStatusFree" >空閒</label>';
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusBusy" value="busy" /><label for="TableStatusBusy" >使用中</label>';
+                    edit_str += '<input name="TableStatus" type="radio" id="TableStatusDisabled" value="disabled" checked/><label for="TableStatusDisabled" >停用</label>';
+
+                }
+            });
+            $('#modal1-content').append(edit_str);
+            $('#modal1').modal('open');
+        }
+
+        $('#edit_submit').on('click', function () {
+            var availableRef = database.ref("Table/" + $('#tableRef').val().slice(0, 2) + "/available");
+            availableRef.once("value", function (snapshot) {
+                console.log($('#' + $('#tableRef').val().slice(0, 2) + '_queue').children().length);
+
+                var tmp = snapshot.val();
+                if (origin_table_status == 'free') {
+                    if (origin_table_status == $("input[name=TableStatus]:checked").val()) { }
+                    else {
+                        tmp--;
+                    }
+                }
+                else {
+                    if ($("input[name=TableStatus]:checked").val() == 'free') {
+                        tmp++;
+                    }
+                }
+                availableRef.set(tmp);
+            });
+            var obj = {
+                tableNum: $('#tableNum').val(),
+                tableStatus: $("input[name=TableStatus]:checked").val()
+            };
+            var tableRef = database.ref("Table/" + $('#tableRef').val());
+
+            tableRef.set(obj);
+
+        });
+
+        function init_table() {
+            var p1 = {}, p2 = {}, p4 = {}, p5 = {};
+            $.each($('#table_1p').val(), function (key, value) {
+                var tmp = {};
+                p1[value] = {
+                    tableNum: value,
+                    tableStatus: 'free'
+                };
+                p1.counter = $('#table_1p').val().length;
+                p1.available = $('#table_1p').val().length;
+
+            });
+            $.each($('#table_2p').val(), function (key, value) {
+                var tmp = {};
+                p2[value] = {
+                    tableNum: value,
+                    tableStatus: 'free'
+                };
+                p2.counter = $('#table_2p').val().length;
+                p2.available = $('#table_2p').val().length;
+
+            });
+            $.each($('#table_4p').val(), function (key, value) {
+                var tmp = {};
+                p4[value] = {
+                    tableNum: value,
+                    tableStatus: 'free'
+                };
+                p4.counter = $('#table_4p').val().length;
+                p4.available = $('#table_4p').val().length;
+
+            });
+            $.each($('#table_5p').val(), function (key, value) {
+                var tmp = {};
+                p5[value] = {
+                    tableNum: value,
+                    tableStatus: 'free'
+                };
+                p5.counter = $('#table_5p').val().length;
+                p5.available = $('#table_5p').val().length;
+            });
+
+            rootRef.child('Table/1P').set(p1);
+            rootRef.child('Table/2P').set(p2);
+            rootRef.child('Table/4P').set(p4);
+            rootRef.child('Table/5P').set(p5);
+
+            location.reload();
+        }
+
+        function token_info(tokenLink) {
+            var tokenRef = database.ref("Queue/" + tokenLink);
+
+            var edit_str = "";
+            tokenRef.once('value', function (snapshot) {
+                $('#modal2-content').empty();
+                var obj = snapshot.val();
+                edit_str += '<h4>序號：' + obj.reservationID + '號</h4>';
+                edit_str += '<h4>訂位人：' + obj.reservationName + '</h4>';
+                edit_str += '<h4>人數：' + obj.reservationNumPeople + '人</h4>';
+                edit_str += '<h4>聯絡電話：' + obj.reservationTelephone + '</h4>';
+
+            });
+            $('#modal2-content').append(edit_str);
+            $('#modal2').modal('open');
+        }
+    </script>
+
+</body>
+
+</html>

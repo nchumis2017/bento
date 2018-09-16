@@ -1,0 +1,55 @@
+{
+  "_from": "git+https://github.com/jsHybugger/cordova-plugin-jshybugger.git",
+  "_id": "cordova-plugin-jshybugger@4.5.9",
+  "_inBundle": false,
+  "_location": "/cordova-plugin-jshybugger",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "https://github.com/jsHybugger/cordova-plugin-jshybugger.git",
+    "rawSpec": "https://github.com/jsHybugger/cordova-plugin-jshybugger.git",
+    "saveSpec": "git+https://github.com/jsHybugger/cordova-plugin-jshybugger.git",
+    "fetchSpec": "https://github.com/jsHybugger/cordova-plugin-jshybugger.git",
+    "gitCommittish": null
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "git+https://github.com/jsHybugger/cordova-plugin-jshybugger.git#f66ce434b03eb9ab07b09e10f2185a078ed76273",
+  "_spec": "https://github.com/jsHybugger/cordova-plugin-jshybugger.git",
+  "_where": "/home/cacacamel/GithubRepo/106-MIS-Project/Bento/apk/bento/node_modules",
+  "author": {
+    "name": "SF Systems GmbH"
+  },
+  "bugs": {
+    "url": "https://github.com/jsHybugger/cordova-plugin-jshybugger/issues"
+  },
+  "bundleDependencies": false,
+  "cordova": {
+    "id": "org.jshybugger.cordova",
+    "platforms": [
+      "android"
+    ]
+  },
+  "deprecated": false,
+  "description": "jsHybugger - Javascript debugger for Android",
+  "engines": [
+    {
+      "name": "cordova",
+      "version": ">=3.0.0"
+    }
+  ],
+  "homepage": "https://github.com/jsHybugger/cordova-plugin-jshybugger",
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "license": "Apache License 2.0",
+  "name": "cordova-plugin-jshybugger",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsHybugger/cordova-plugin-jshybugger.git"
+  },
+  "version": "4.5.9"
+}

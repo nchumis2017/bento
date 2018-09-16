@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="./js/jquery-3.2.1.min.js" ></script>
+    <link rel="stylesheet" href="./css/materialize.min.css">
+    <script src="./js/materialize.min.js"></script>
+    <link rel="stylesheet" href="./css/main.css">
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+
+    <title>Menu - 店家</title>
+    <script>
+      $(document).ready(function () {
+            $('.modal').modal();
+      });
+    </script>
+
+</head>
+<body>
+    <script>
+        var config = {
+                apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+                authDomain: "nchumis2017-5566.firebaseapp.com",
+                databaseURL: "https://nchumis2017-5566.firebaseio.com",
+                projectId: "nchumis2017-5566",
+                storageBucket: "nchumis2017-5566.appspot.com",
+                messagingSenderId: "501160127423"
+            };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+    </script>
+    <nav>
+      <div class='nav-wrapper #ab47bc purple lighten-1'>
+            <a href="./mainpage.html" class="brand-logo">BENTO店家端</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div class="container" id="menu"></div>
+
+    <div id="modal1" class="modal">
+        <div id="modal1-content" class="modal-content">
+
+        </div>
+        <div class="modal-footer">
+            <a href="#!" id="edit_submit" class="modal-action modal-close waves-effect waves-green btn">更新</a>
+        </div>
+    </div>
+
+    <script>
+        var rootRef = database.ref("Products/");
+        rootRef.on('value', function(snapshot){
+            $('#menu').empty();
+
+            $.each(snapshot.val(), function(key, value){
+                var str = "";
+                str += '<h4>'+key+'</h4><hr>'
+                str += '<table class="striped" id="menu_list"><tr><td>品名</td><td>售價</td><td>簡介</td><td>狀態</td></tr>'
+
+                snapshot.child(key + '/Data').forEach(function(data){
+                    var item = data.val();
+                    var tempA;
+                    if(item.ProductStatus == true){
+                      tempA = "開放";
+                    }
+                    else{
+                      tempA = "不開放";
+                    }
+                    str += '<tr><td>品名：' + item.ProductName + ' </td><td>' + item.ProductPrice + ' </td><td>' + item.ProductIntro + '</td><td>' + tempA + '<br><i class="material-icons edit" onclick="javascript:edit(\'' + item.ProductID + '\')">create</i><i class="material-icons">delete</i></td></tr>';
+                });
+                str += '</table>';
+                $('#menu').append(str);
+            });
+        });
+        function edit(name){
+            var cate = name.slice(0, name.length - 1);
+            var productRef = database.ref('Products/'+cate+'/Data/'+name);
+            var edit_str = "";
+            productRef.once('value', function(snapshot){
+                $('#modal1-content').empty();
+                var obj = snapshot.val();
+                edit_str += '<div class="row">';
+                edit_str += '<input value="' + obj.ProductID + '" id="ProductID" type="text" style="display:none" class="validate">';
+                edit_str += '<div class="input-field col s6"><input value="'+obj.ProductName+'" id="ProductName" type="text" class="validate">';
+                edit_str += '<label class="active" for="ProductName">產品名稱</label></div>';
+                edit_str += '<div class="input-field col s6"><input value="' + obj.ProductPrice + '" id="ProductPrice" type="text" class="validate">';
+                edit_str += '<label class="active" for="ProductPrice">產品售價</label></div>';
+                edit_str += '</div>';
+                edit_str += '<div class="row">';
+                edit_str += '<div class="input-field col s6"><input value="' + obj.ProductIntro + '" id="ProductIntro" type="text" class="validate">';
+                edit_str += '<label class="active" for="ProductIntro">產品簡介</label></div>';
+                edit_str += '<div class="input-field col s6" >';
+                if (obj.ProductStatus)
+                {
+                    edit_str += '<input name="ProductStatus" type="radio" id="ProductStatusT" value="true" checked /><label for="ProductStatusT" >開放訂購</label>';
+                    edit_str += '<input name="ProductStatus" type="radio" id="ProductStatusF" value="false"/><label for="ProductStatusF" >關閉訂購</label>';
+                }
+                else
+                {
+                    edit_str += '<input name="ProductStatus" type="radio" id="ProductStatusT" value="true"/><label for="ProductStatusT">開放訂購</label>';
+                    edit_str += '<input name="ProductStatus" type="radio" id="ProductStatusF" value="false" checked /><label for="ProductStatusF">關閉訂購</label>';
+                }
+                edit_str += '</div></div>';
+            });
+            $('#modal1-content').append(edit_str);
+            $('#modal1').modal('open');
+        }
+
+        $('#edit_submit').on('click', function(){
+
+            var obj = {
+                ProductID: $('#ProductID').val(),
+                ProductIntro: $('#ProductIntro').val(),
+                ProductPrice: $('#ProductPrice').val(),
+                ProductName: $('#ProductName').val(),
+                ProductStatus: $("#ProductStatusT").is(":checked")
+            };
+            var cate = obj.ProductID.slice(0, obj.ProductID.length - 1);
+            var productRef = database.ref('Products/' + cate + '/Data/' + obj.ProductID);
+            productRef.set(obj);
+        });
+    </script>
+</body>
+</html>

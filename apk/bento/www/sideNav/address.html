@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="../css/main.css">
+
+
+
+    <title>index</title>
+  </head>
+  <body>
+
+    <!-- navbar -->
+    <!-- <div id="navbar"></div> -->
+
+    <!-- <script type="text/javascript">
+    var ajax = new XMLHttpRequest();
+    ajax.open("GET", "/navbar.html", false);
+    ajax.send();
+    document.getElementById("navbar").innerHTML += ajax.responseText;
+    </script>
+    <script type="text/javascript">$(".button-collapse").sideNav();</script> -->
+    <link href='https://fonts.googleapis.com/icon?family=Material+Icons' rel='stylesheet'>
+    <nav>
+      <div class='nav-wrapper #00838f cyan darken-4'>
+        <a href='../index.html' class='brand-logo'>BENTO</a>
+        <a href='#' data-activates='mobile-demo' class='button-collapse'><i class='material-icons'>menu</i></a>
+        <ul class='right hide-on-med-and-down'>
+          <li><a href='#'>個人資訊</a></li>
+          <li><a href='#'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+        <ul class='side-nav' id='mobile-demo'>
+          <li class="#00838f cyan darken-4" ><a href='#' style="color:white;">WELCOME</a></li>
+          <li><a href='./personInfo.html'>個人資訊</a></li>
+          <li><a href='./address.html'>常用地址</a></li>
+          <li><a href='#'>Default</a></li>
+        </ul>
+      </div>
+    </nav>
+    </div>
+<script type="text/javascript">$(".button-collapse").sideNav();</script>
+
+
+  <!-- navbar -->
+
+<br>
+
+      <div class="container">
+
+      <div class="card">
+        <div class="card-content">
+
+        <form class="" action="javascript:changeName()" method="post">
+          目前常用地址<input type="text" name="" value="" id="CurrentAddress" disabled>
+          更改常用地址<input type="text" name="" value="" id="FavoriteAddress">
+          <input type="submit" name="" value="更改" class="btn" >
+        </form>
+      </div>
+
+    </div>
+</div>
+
+  </body>
+  <script type="text/javascript">
+  var CurrentAddress = window.localStorage.getItem("FavoriteAddress");
+  if(CurrentAddress!=""){
+    document.getElementById("CurrentAddress").value = CurrentAddress;
+  }
+
+      function changeName(){
+
+        var FavoriteAddress = document.getElementById("FavoriteAddress").value;
+        if(FavoriteAddress!=""){console.log(FavoriteAddress);
+
+        localStorage.setItem("FavoriteAddress",FavoriteAddress);
+        swal("成功","已更改地址","success").then((value)=>{
+          location.reload();
+        });
+
+      }
+        else{
+          swal("請輸入地址");
+        }
+      }
+  </script>
+</html>

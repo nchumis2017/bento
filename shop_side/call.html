@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>叫號</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/css/materialize.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.0.7/sweetalert2.all.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+    <script>
+        $(document).ready(function () {
+
+            $('select').material_select();
+            $('.modal').modal();
+        });
+    </script>
+    <style>
+        :root {
+            --token-width: 100px;
+            --token-height: 100px;
+    
+        }
+/*     
+        body {
+        } */
+    
+        .token {
+            width: var(--token-width);
+            height: var(--token-height);
+            background-color: #bbdefb;
+            border-radius: 100%;
+            text-align: center;
+            box-shadow: 0 0 30px #424242;
+        }
+    
+        .token span {
+            line-height: var(--token-height);
+            font-size: 50px;
+        }
+
+
+        body {
+            background-color: #ffcc80
+
+            /* position: relative;
+            background-color: #F69D9D;
+            animation-name: example;
+            animation-iteration-count: infinite;
+            animation-duration: 20s; */
+
+
+            /*width: 100px;
+            height: 100px;*/
+            /*-webkit-animation-name: example;*/
+            /*-webkit-animation-duration: 30s;*/
+            /*-webkit-animation-iteration-count: infinite;*/
+        }
+
+        /*@-webkit-keyframes example {
+        0%   {background-color:#F69D9D; left:0px; top:0px;}
+        25%  {background-color:#FFEAB6; left:200px; top:0px;}
+        50%  {background-color:#FDFFBA; left:200px; top:200px;}
+        75%  {background-color:#C0FFC2; left:0px; top:200px;}
+        100% {background-color:#F69D9D; left:0px; top:0px;}
+        }*/
+
+
+        /* @keyframes example {
+            0%   {background-color:#F69D9D;}
+            25%  {background-color:#FFEAB6;}
+            50%  {background-color:#FDFFBA;}
+            75%  {background-color:#C0FFC2;}
+            100% {background-color:#F69D9D;}
+        } */
+    </style>
+</head>
+
+<body>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDd2rFHwPXyIkq0iRSinBBfzg31NYJLapE",
+            authDomain: "nchumis2017-5566.firebaseapp.com",
+            databaseURL: "https://nchumis2017-5566.firebaseio.com",
+            projectId: "nchumis2017-5566",
+            storageBucket: "nchumis2017-5566.appspot.com",
+            messagingSenderId: "501160127423"
+        };
+        firebase.initializeApp(config);
+        var database = firebase.database();
+    </script>
+    <nav>
+        <div class="nav-wrapper">
+            <a href="#" class="brand-logo">Logo</a>
+            <ul id="nav-mobile" class="right hide-on-med-and-down">
+                <li>
+                    <a href="sass.html">Sass</a>
+                </li>
+                <li>
+                    <a href="badges.html">Components</a>
+                </li>
+                <li>
+                    <a href="collapsible.html">JavaScript</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+
+
+    <script>
+        queueRef = database.ref("/Queue");
+        queueRef.on("value", function (snapshot) {
+            $('#queue').empty();
+            var obj = snapshot.val();
+            var str = "";
+            $.each(obj, function (key, value) {
+                if (key == 'counter')
+                    return;
+                if (key == 'call')
+                    return;
+                str += '<h3>' + key + '</h3>';
+                str += '<div class="row" id="' + key + '_queue">'
+                // console.log(Object.keys(value));
+                var count = 0;
+                $.each(value, function (k, v) {
+                    count++;
+                    str += '<div class="token" id="' + key + "_" + count + '" style="float:left" onclick="javascript:token_info(\'' + key + '/' + k + '\','+count+')"><span>' + k + '</span></div>';
+                    // console.log(k +"XXXX"+ JSON.stringify(v));
+
+                });
+                str += '</div>';
+            });
+            $('#queue').append(str);
+        });         
+
+        function token_info(tokenLink, count) {
+                var tokenRef = database.ref("Queue/" + tokenLink);
+
+                var edit_str = "";
+                tokenRef.once('value', function (snapshot) {
+                    $('#modal2-content').empty();
+                    var obj = snapshot.val();
+                    edit_str += '<div class="row"><div style="width:60%;float:left">'
+                    edit_str += '<h4>序號：' + obj.reservationID + '號</h4>';
+                    edit_str += '<h4>訂位人：' + obj.reservationName + '</h4>';
+                    edit_str += '<h4>人數：' + obj.reservationNumPeople + '人</h4>';
+                    edit_str += '<h4>聯絡電話：' + obj.reservationTelephone + '</h4></div>';
+                    edit_str += '<div style="width:40%;float:right"><img src="./bell.svg" width="80%" height="80%" style="margin-left:35float:right" onclick="javascript:calling(\'' + tokenLink+ '\', '+count+')">';
+                    edit_str += '</div>';
+                });
+                $('#modal2-content').append(edit_str);
+                $('#modal2').modal('open');
+        }
+        function calling(link, count){
+            var tokenRef = database.ref("Queue/" + link);
+            var callRef = database.ref("Queue/call");
+            callRef.once('value', function(snapshot){
+                var obj = snapshot.val();
+                var key_value = link.split("/");
+                obj[key_value[0]] = Number(key_value[1]); 
+                // $('#'+ key_value[0]+count).css();
+                callRef.set(obj);
+            });
+            
+            // 要加上 timeout
+
+            // tokenRef.set({});
+
+        }
+    </script>
+
+
+
+
+
+
+
+
+    <div class="row">
+        <div id="queue"></div>
+    </div>
+    <div id="modal2" class="modal">
+        <div id="modal2-content" class="modal-content">
+    
+        </div>
+        <div class="modal-footer">
+            <!-- <a href="#!" id="edit_submit" class="modal-action modal-close waves-effect waves-green btn">更新</a> -->
+        </div>
+    </div>
+</body>
+
+</html>
